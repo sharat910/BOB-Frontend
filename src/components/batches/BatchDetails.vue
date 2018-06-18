@@ -1,0 +1,65 @@
+<template>
+  <div class="details">
+    <TopBar entity='Batch'/>
+    <div class="container">
+    <h1 class="page-header">{{batch.summary}}
+        <span class="pull-right">
+            <router-link class="btn btn-primary" v-bind:to="'/edit/batch/'+batch.id">Edit</router-link>
+            <button class="btn btn-danger" v-on:click="deleteBatch(batch.id)">Delete</button>
+            </span>
+    </h1>
+    <ul class="list-group">
+            <li class="list-group-item"><span class="glyphicon glyphicons-stopwatch" aria-hidden="true"></span>  {{batch.timing}}</li>
+            <li class="list-group-item"><span class="glyphicon glyphicons-calendar" aria-hidden="true"></span>  {{batch.day}}</li>
+    </ul>
+    <br>
+    <ul class="list-group">
+            <li class="list-group-item"><span class="glyphicon glyphicons-cup" aria-hidden="true"></span> {{batch.level_detail}}</li>
+            <li class="list-group-item"><span class="glyphicon glyphicons-woman" aria-hidden="true"></span> {{batch.teacher_name}}</li>
+    </ul>
+    <br>
+
+    <Students v-bind:student_prop="batch.students" />
+
+  </div>
+</div>
+</template>
+
+<script>
+import TopBar from '@/components/TopBar';
+import Students from '@/components/students/Students';
+
+export default {
+  name: 'batchdetails',
+  data () {
+    return {
+      batch: ''
+    }
+  },
+  methods:{
+      fetchBatch(id){
+          this.$http.get('http://127.0.0.1:8000/api/batch/'+id + '/')
+          .then(function(response){
+            this.batch = response.body;
+          });
+      },
+      deleteBatch(id){
+          this.$http.delete('http://127.0.0.1:8000/api/batch/'+id + '/')
+          .then(function(response){
+            this.$router.push({name: 'Batches', query: {alert: 'Batch Deleted'}});
+          });
+      }
+  },
+  created: function(){
+      this.fetchBatch(this.$route.params.id);
+  },
+  components: {
+    TopBar,Students
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
