@@ -1,6 +1,6 @@
 <template>
-  <div v-if="show" :class="'alert alert-' + type + ' alert-dismissible'" role="alert">
-  <button type="button" class="close" @click="show=false;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <div :class="'alert alert-' + type + ' alert-dismissible'" role="alert">
+  <button type="button" class="close" @click="$emit('alertClosed')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     {{message}}
   </div>
 </template>
@@ -10,8 +10,10 @@ export default {
   name: 'alert',
   props: {
     message: String,
-    type: String,
-    show: Boolean
+    type: {
+      type: String,
+      default: 'info'
+    },
   },
   data () {
     return {
