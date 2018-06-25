@@ -2,7 +2,7 @@
     <div class="salaryform">
     <!-- <TopBar entity='Salary'/> -->
     <!-- <div class="container"> -->
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postSalary">
 
       <div class="form-group ">
@@ -98,14 +98,18 @@
     data () {
         return {
         item: {},
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
       }
     },
     methods: {
         postSalary(e){
             if(!this.item.level || !this.item.type ||
                 !this.item.description || !this.item.reserve_quantity_max){
-                this.alert = 'Please fill in all the fields';
+                this.raiseAlert('Please fill in all the fields','danger');
             } else {
 
               if (this.mode === 'Add') {
@@ -113,7 +117,7 @@
                   this.item.reserve_quantity = 0;
                   this.$http.post('http://localhost:8000/api/item/', this.item)
                       .then(function(response){
-                          this.alert = 'Item Record added succesfully';
+                          this.raiseAlert('Item Record added succesfully','success');
                           this.$emit('itemUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
                       });
@@ -121,7 +125,7 @@
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/item/' + this.item_id + '/', this.item)
                       .then(function(response){
-                          this.alert = 'Item Record edited succesfully';
+                          this.raiseAlert('Item Record edited succesfully','success');
                           this.$emit('itemUpdated');
                       });
                 }
@@ -137,6 +141,16 @@
               this.item = response.body;
             });
         },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
     },
     created: function(){
         if (this.mode === 'Edit'){

@@ -2,6 +2,7 @@
   <div class="details">
 
     <div class="container">
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <router-link class="btn btn-default" :to="{name: 'Teachers'}">Back</router-link>
     <h1 class="page-header">{{teacher.name}}
         <span class="pull-right">
@@ -33,13 +34,19 @@
 
 <script>
 import SalaryRecordList from '@/components/salary/SalaryRecordList';
-import Batches from '@/components/batches/Batches'
+import Batches from '@/components/batches/Batches';
+import Alert from '@/components/Alert';
 
 export default {
   name: 'teacherdetails',
   data () {
     return {
-      teacher: ''
+      teacher: '',
+      alert:{
+        message: '',
+        type: '',
+        raised: false
+      },
     }
   },
   methods:{
@@ -54,14 +61,28 @@ export default {
           .then(function(response){
             this.$router.push({name: 'Teachers', query: {alert: 'Teacher Deleted'}});
           });
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
       }
   },
   created: function(){
-      this.fetchTeacher(this.$route.params.id);
+    if(this.$route.query.alert){
+      this.raiseAlert(this.$route.query.alert,'success');
+    };
+    this.fetchTeacher(this.$route.params.id);
   },
   components: {
     SalaryRecordList,
-    Batches
+    Batches,
+    Alert
   }
 }
 </script>

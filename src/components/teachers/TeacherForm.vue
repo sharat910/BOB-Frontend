@@ -1,10 +1,11 @@
 <template>
   <div class="add">
     <div class="container">
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
       <router-link v-if="mode==='Add'" class="btn btn-default" :to="{name: 'Teachers'}">Back</router-link>
       <router-link v-else class="btn btn-default" :to="{name: 'TeacherDetails',params: {'id':id}}">Back</router-link>
 
-    <Alert v-if="alert" v-bind:message="alert" />
+
     <h1 class="page-header">{{mode}} Teacher</h1>
     <br>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postTeacher">
@@ -92,25 +93,29 @@
     data () {
         return {
         teacher: {},
-        alert:''
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        }
         }
     },
     methods: {
         postTeacher(e){
             if(!this.teacher.name || !this.teacher.phone ){
-                this.alert = 'Please fill in all required fields: Name, Phone';
+                this.raiseAlert('Please fill in all required fields: Name, Phone','danger');
             } else {
 
                 if (this.mode === 'Add') {
                   this.$http.post('http://localhost:8000/api/teacher/', this.teacher)
                       .then(function(response){
-                          this.$router.push({name: 'Teachers', query: {alert: 'Teacher Added'}});
+                          this.$router.push({name: 'Teachers', query: {alert: 'New teacher added succesfully.'}});
                       });
 
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/teacher/' + this.$route.params.id + '/', this.teacher)
                       .then(function(response){
-                          this.$router.push({name: 'Teachers', query: {alert: 'Teacher Details Edited'}});
+                          this.$router.push({name: 'TeacherDetails', params:{id:this.id}, query: {alert: 'Teacher details edited succesfully.'}});
                       });
                 }
 
@@ -125,6 +130,17 @@
               this.teacher = response.body;
             });
         },
+
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
     },
     created: function(){
         if (this.mode === 'Edit'){

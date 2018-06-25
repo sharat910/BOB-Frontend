@@ -1,8 +1,7 @@
 <template>
     <div class="feeform">
-    <!-- <TopBar entity='Fee'/> -->
     <!-- <div class="container"> -->
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postFee">
 
 
@@ -152,15 +151,19 @@
 
     import Multiselect from 'vue-multiselect';
     // Vue.component('multiselect', Multiselect)
-
     import Alert from '@/components/Alert';
-    import TopBar from '@/components/TopBar';
+
     export default {
     name: 'feeform',
     props: {
       mode: String,
       student_id: Number,
-      fee_id: Number
+      fee_id: Number,
+      alert:{
+        message: '',
+        type: '',
+        raised: false
+      },
     },
     data () {
         return {
@@ -209,7 +212,7 @@
             if(!this.fee_type || this.selected_months.length == 0 ||
                 !this.fee.fee_amount || !this.fee.fee_receipt_no ||
                 !this.fee.level || !this.fee.date_of_payment){
-                this.alert = 'Please fill in all the fields';
+                this.raiseAlert('Please fill in all the fields','danger');
             } else {
             var month_ids = [];
             if (this.multiple_months == true)
@@ -232,7 +235,7 @@
 
                   this.$http.post('http://localhost:8000/api/feerecord/', new_fee)
                       .then(function(response){
-                          this.alert = 'Fee Record added succesfully';
+                          this.raiseAlert('Fee Record added succesfully','success');
                           this.$emit('feeUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
                       });
@@ -240,7 +243,7 @@
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/feerecord/' + this.fee_id + '/', new_fee)
                       .then(function(response){
-                          this.alert = 'Fee Record edited succesfully';
+                          this.raiseAlert('Fee Record edited succesfully','success');
                           this.$emit('feeUpdated');
                       });
                 }
@@ -287,6 +290,16 @@
             output.push({id: monthids[i],month: this.month_dict[monthids[i]]})
           }
           return output;
+        },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
         }
     },
     created: function(){
@@ -328,7 +341,6 @@
     },
     components: {
         Alert,
-        TopBar,
         Multiselect
     },
 

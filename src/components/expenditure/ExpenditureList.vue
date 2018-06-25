@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 class="page-header"> Expenditure Records
       <span class="pull-right">
         <button type="button" @click="launch_form=true,mode='Add'" class="btn btn-success"
@@ -68,7 +68,11 @@ export default {
   data() {
       return {
         mode: '',
-        alert: '',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         expenditure_id: 0,
         launch_form: false,
         expenditures: []
@@ -78,7 +82,7 @@ export default {
     deleteExpenditureRecord(id){
         this.$http.delete('http://127.0.0.1:8000/api/expenditure/'+id + '/')
         .then(function(response){
-          this.alert = 'Expenditure Record Deleted';
+          this.raiseAlert('Expenditure record deleted succesfully');
           this.waitAndFetchExpenditures();
         });
     },
@@ -90,6 +94,16 @@ export default {
     },
     waitAndFetchExpenditures(){
       setTimeout(this.fetchExpenditures,300);
+    },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
     }
   },
   created: function(){

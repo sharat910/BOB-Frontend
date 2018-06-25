@@ -1,7 +1,7 @@
 <template>
   <div class="batches">
   <div class="container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 v-if="batch_prop == undefined" class="page-header">
       Manage Batches
       <span class="pull-right">
@@ -51,7 +51,11 @@
     data () {
       return {
         batches: [],
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         filterInput:'',
       }
     },
@@ -67,11 +71,21 @@
         return list.filter(function(batch){
           return batch.day.indexOf(value) > -1;
         });
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
       }
     },
     created: function(){
       if(this.$route.query.alert){
-        this.alert = this.$route.query.alert;
+        this.raiseAlert(this.$route.query.alert,'success');
       };
       this.fetchBatches();
     },

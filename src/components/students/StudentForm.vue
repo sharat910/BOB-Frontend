@@ -1,10 +1,11 @@
 <template>
   <div class="add">
     <div class="container">
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <router-link v-if="mode==='Add'" class="btn btn-default" :to="{name: 'Students'}">Back</router-link>
     <router-link v-else class="btn btn-default" :to="{name: 'StudentDetails',params: {'id': id}}">Back</router-link>
 
-    <Alert v-if="alert" v-bind:message="alert" />
+
     <h1 class="page-header">{{mode}} Student</h1>
     <br>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postStudent">
@@ -213,25 +214,29 @@
         return {
         student: {},
         batches: [],
-        alert:''
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         }
     },
     methods: {
         postStudent(e){
             if(!this.student.name || !this.student.date_of_birth || !this.student.email){
-                this.alert = 'Please fill in all required fields';
+                this.raiseAlert('Please fill in all required fields','danger');
             } else {
 
                 if (this.mode === 'Add') {
                   this.$http.post('http://localhost:8000/api/student/', this.student)
                       .then(function(response){
-                          this.$router.push({name: 'Students', query: {alert: 'Student Added'}});
+                          this.$router.push({name: 'Students', query: {alert: 'Student added succesfully.'}});
                       });
 
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/student/' + this.$route.params.id + '/', this.student)
                       .then(function(response){
-                          this.$router.push({name: 'Students', query: {alert: 'Student Details Edited'}});
+                          this.$router.push({name: 'StudentDetails', params:{id:this.id}, query: {alert: 'Student details edited succesfully.'}});
                       });
                 }
 
@@ -251,6 +256,17 @@
               this.student = response.body;
             });
         },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
+
     },
     created: function(){
         this.fetchBatches();

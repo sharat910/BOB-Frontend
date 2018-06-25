@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="ratemanager">
     <div class="container">
-      <Alert v-if="alert" :message="alert" />
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
       <h1 class="page-header"> Rate Manager </h1>
 
       <div class="col-sm-4">
@@ -172,7 +172,11 @@ export default {
             edit: false,
           },
         },
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
     }
   },
   methods: {
@@ -203,8 +207,18 @@ export default {
       this.attr[item].edit = false;
       this.$http.put('http://localhost:8000/api/' + item + '/1/',this.rates[item])
                     .then(function (response) {
-                        this.alert = capitalize_first_letter(item) + ' edited';
+                        this.raiseAlert(capitalize_first_letter(item.slice(0,-4)) + ' ' + item.slice(-4) + ' edited','success');
                       });
+    },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
     }
   },
   created: function(){

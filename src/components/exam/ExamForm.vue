@@ -2,7 +2,7 @@
     <div class="examform">
     <!-- <TopBar entity='Exam'/> -->
     <!-- <div class="container"> -->
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postExam">
 
 
@@ -86,14 +86,18 @@
     data () {
         return {
         exam: {},
-        alert:''
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         }
     },
     methods: {
         postExam(e){
             if(!this.exam.score || !this.exam.max_score ||
                 !this.exam.date_of_exam || !this.exam.level){
-                this.alert = 'Please fill in all the fields';
+                this.raiseAlert('Please fill in all the fields','danger');
             } else {
                 var new_exam = {
                 score: this.exam.score,
@@ -106,7 +110,7 @@
 
                   this.$http.post('http://localhost:8000/api/examresult/', new_exam)
                       .then(function(response){
-                          this.alert = 'Exam Result added succesfully';
+                          this.raiseAlert('Exam Result added succesfully.','success');
                           this.$emit('examUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Exam Added'}});
                       });
@@ -114,7 +118,7 @@
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/examresult/' + this.exam_id + '/', new_exam)
                       .then(function(response){
-                          this.alert = 'Exam Result edited succesfully';
+                          this.raiseAlert('Exam Result edited succesfully.','success');
                           this.$emit('examUpdated');
                       });
                 }
@@ -131,6 +135,16 @@
               this.exam = response.body;
             });
         },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
     },
     created: function(){
         console.log("Created")

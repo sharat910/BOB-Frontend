@@ -1,8 +1,7 @@
 <template>
 <div class="details">
-  <!-- <TopBar entity="Item"/> -->
   <div class="container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
   <h1 class="page-header"> Stock Item
       <span class="pull-right">
         <!-- <TransactionForm :item='item' :long='false'/> -->
@@ -122,7 +121,6 @@
 </template>
 
 <script>
-import TopBar from '@/components/TopBar';
 import Alert from '@/components/Alert';
 import TransactionList from '@/components/stock/TransactionList';
 import TransactionForm from '@/components/stock/TransactionForm';
@@ -133,7 +131,11 @@ data () {
   return {
     item: {level: {}},
     edit_level: 0,
-    alert: '',
+    alert:{
+      message: '',
+      type: '',
+      raised: false
+    },
     edit: false
   }
 },
@@ -147,29 +149,38 @@ methods:{
     editItem(){
       this.$http.put('http://localhost:8000/api/item/' + this.item.id + '/', this.item)
           .then(function(response){
-              this.alert = 'Stock Item details edited succesfully.';
+              this.raiseAlert('Stock Item details edited succesfully.','success');
               this.refetchItem();
           });
     },
     deleteItem(id){
         this.$http.delete('http://127.0.0.1:8000/api/item/'+id + '/')
         .then(function(response){
-          this.$router.push({name: 'Items', query: {alert: 'Stock Item Deleted'}});
+          this.$router.push({name: 'Items', query: {alert: 'Stock item deleted succesfully'}});
         });
     },
     refetchItem: function () {
         setTimeout(this.fetchItem,500,this.item.id);
-      },
+    },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
+    }
 
 },
 created: function(){
   if(this.$route.query.alert){
-    this.alert = this.$route.query.alert;
+    this.raiseAlert(this.$route.query.alert,'success');
   };
   this.fetchItem(this.$route.params.id);
 },
 components: {
-  TopBar,
   TransactionList,
   Alert,
   TransactionForm

@@ -1,10 +1,12 @@
 <template>
   <div class="add">
     <div class="container">
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
+
     <router-link v-if="mode==='Add'" class="btn btn-default" :to="{name: 'Batches'}">Back</router-link>
     <router-link v-else class="btn btn-default" :to="{name: 'BatchDetails',params: {'id':id}}">Back</router-link>
 
-    <Alert v-if="alert" v-bind:message="alert" />
+
     <h1 class="page-header">{{mode}} Batch</h1>
     <br>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postBatch">
@@ -136,7 +138,11 @@
         return {
         batch: {},
         teachers: [],
-        alert:''
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         }
     },
     methods: {
@@ -144,19 +150,19 @@
             if(!this.batch.timing || !this.batch.day ||
                !this.batch.level_start_date ||
                !this.batch.level || !this.batch.teacher){
-                this.alert = 'Please fill in all required fields.';
+                this.raiseAlert('Please fill in all required fields.','danger');
             } else {
 
                 if (this.mode === 'Add') {
                   this.$http.post('http://localhost:8000/api/batch/', this.batch)
                       .then(function(response){
-                          this.$router.push({name: 'Batches', query: {alert: 'Batch Added'}});
+                          this.$router.push({name: 'Batches', query: {alert: 'New batch added succesfully'}});
                       });
 
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/batch/' + this.$route.params.id + '/', this.batch)
                       .then(function(response){
-                          this.$router.push({name: 'Batches', query: {alert: 'Batch Details Edited'}});
+                          this.$router.push({name: 'BatchDetails', params:{id:this.id}, query: {alert: 'Batch details edited succesfully'}});
                       });
                 }
 
@@ -178,6 +184,16 @@
               this.teachers = response.body;
             });
         },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
     },
     created: function(){
       this.fetchTeachers()

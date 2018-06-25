@@ -1,7 +1,7 @@
 <template>
   <div class="teachers">
   <div class="container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 class="page-header">
       Manage Teachers
       <span class="pull-right">
@@ -43,7 +43,11 @@
     data () {
       return {
         teachers: [],
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         filterInput:''
       }
     },
@@ -59,11 +63,21 @@
         return list.filter(function(teacher){
           return teacher.name.indexOf(value) > -1;
         });
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
       }
     },
     created: function(){
       if(this.$route.query.alert){
-        this.alert = this.$route.query.alert;
+        this.raiseAlert(this.$route.query.alert);
       }
       this.fetchTeachers();
     },

@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="salaryrecords container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h2 class="page-header"> Salary Records
       <span class="pull-right">
         <button type="button" v-if="!viewtable" @click="viewtable=true;"class="btn btn-default">View Records</button>
@@ -79,7 +79,11 @@ export default {
   data() {
       return {
         mode: '',
-        alert: '',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         salary_id: 0,
         launch_form: false,
         viewtable: false
@@ -89,9 +93,19 @@ export default {
     deleteSalaryRecord(id){
         this.$http.delete('http://127.0.0.1:8000/api/salaryrecord/'+id + '/')
         .then(function(response){
-          this.alert = 'Salary Record Deleted';
+          this.raiseAlert('Salary record deleted succesfully','success');
         });
     },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
+    }
   },
   components: {
     SalaryForm,

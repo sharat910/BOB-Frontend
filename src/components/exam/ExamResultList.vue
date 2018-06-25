@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="examresults container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h2 class="page-header"> Exam Results
       <span class="pull-right">
         <button type="button" v-if="!viewtable" @click="viewtable=true;"class="btn btn-default">View Results</button>
@@ -73,7 +73,11 @@ export default {
   data() {
       return {
         mode: '',
-        alert: '',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         exam_id: 0,
         launch_form: false,
         viewtable: false
@@ -83,9 +87,19 @@ export default {
     deleteExamResult(id){
         this.$http.delete('http://127.0.0.1:8000/api/examresult/'+id + '/')
         .then(function(response){
-          this.alert = 'Exam Result Deleted';
+          this.raiseAlert('Exam result deleted succesfully.','success');
         });
     },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
+    }
   },
   components: {
     ExamForm,

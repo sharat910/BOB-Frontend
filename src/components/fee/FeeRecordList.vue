@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="feerecords container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h2 class="page-header"> Fee Records
       <span class="pull-right">
         <button type="button" v-if="!viewtable" @click="viewtable=true;"class="btn btn-default">View Records</button>
@@ -77,7 +77,11 @@ export default {
   data() {
       return {
         mode: '',
-        alert: '',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         fee_id: 0,
         launch_form: false,
         viewtable: false
@@ -87,9 +91,19 @@ export default {
     deleteFeeRecord(id){
         this.$http.delete('http://127.0.0.1:8000/api/feerecord/'+id + '/')
         .then(function(response){
-          this.alert = 'Fee Record Deleted';
+          this.raiseAlert('Fee record deleted succesfully','success');
         });
     },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
+    }
   },
   components: {
     FeeForm,

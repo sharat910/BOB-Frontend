@@ -13,6 +13,7 @@
     </div>
 
     <div v-if="long" class="form-horizontal">
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
 
       <div class="form-group">
         <label class="col-sm-2 control-label ">
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-
+import Alert from '@/components/Alert';
 
 export default {
   name: 'transactionform',
@@ -80,7 +81,12 @@ export default {
           date: this.getDateToday(),
           operation: 'Add'
         },
-        old_tx: {}
+        old_tx: {},
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
       }
   },
   methods: {
@@ -92,6 +98,7 @@ export default {
       return date;
     },
     saveClicked(){
+      // Add form check.
       if (this.mode == 'Add')
         this.performQuickTransaction(this.tx.operation,this.tx.date);
       else //Edit form
@@ -128,7 +135,7 @@ export default {
       // console.log(tx);
       this.$http.post('http://localhost:8000/api/transaction/', tx)
           .then(function(response){
-            this.raiseAlert('Item: ' + this.item.description + '  |  Quantity updated succesfully','success');
+            this.emitAlert('Item: ' + this.item.description + '  |  Quantity updated succesfully','success');
           });
     },
     editStockItem(tx_op,tx_quantity,item,mute_alerts=false){
@@ -155,7 +162,7 @@ export default {
           var diff = tx_quantity - item.quantity;
           if (diff > item.reserve_quantity){
             var itemsAvailable = (item.quantity + item.reserve_quantity);
-            this.raiseAlert("Items requested: " + tx_quantity +
+            this.emitAlert("Items requested: " + tx_quantity +
             " | Items available: " + itemsAvailable,'danger');
             result=false;
           } else{
@@ -167,7 +174,7 @@ export default {
       if (result != false){
         this.$http.put('http://localhost:8000/api/item/' + item.id + '/', item)
             .then(function(response){
-              this.raiseAlert('Item: ' + item.description + '  |  Quantity edited','info');
+              this.emitAlert('Item: ' + item.description + '  |  Quantity edited','info');
             });
 
       };
@@ -220,21 +227,34 @@ export default {
 
         this.$http.put('http://127.0.0.1:8000/api/transaction/'+this.transaction_id+ '/',new_tx)
         .then(function(response){
-          this.raiseAlert('Transaction edited succesfully','success')
+          this.emitAlert('Transaction edited succesfully','success')
         });
       }
     },
-    raiseAlert(alert_message,alert_type){
+    emitAlert(alert_message,alert_type){
       var alert = {
         message: alert_message,
         type: alert_type
       }
       this.$emit('alertRaised',alert);
+    },
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
     }
   },
   created: function() {
     if (this.mode == 'Edit')
       this.fetchTransaction(this.transaction_id)
+  },
+  components: {
+    Alert
   }
 }
 </script>

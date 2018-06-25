@@ -1,8 +1,8 @@
 <template>
-    <div class="salaryform">
+    <div class="expenditureform">
     <!-- <TopBar entity='Salary'/> -->
     <!-- <div class="container"> -->
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postSalary">
 
       <div class="form-group ">
@@ -76,21 +76,25 @@
     data () {
         return {
         expenditure: {},
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
       }
     },
     methods: {
         postSalary(e){
             if(!this.expenditure.date || !this.expenditure.voucher_id ||
                 !this.expenditure.description || !this.expenditure.amount){
-                this.alert = 'Please fill in all the fields';
+                this.raiseAlert('Please fill in all the fields','danger');
             } else {
 
               if (this.mode === 'Add') {
 
                   this.$http.post('http://localhost:8000/api/expenditure/', this.expenditure)
                       .then(function(response){
-                          this.alert = 'Expenditure Record added succesfully';
+                          this.raiseAlert('Expenditure Record added succesfully','success');
                           this.$emit('expenditureUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
                       });
@@ -98,7 +102,7 @@
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/expenditure/' + this.expenditure_id + '/', this.expenditure)
                       .then(function(response){
-                          this.alert = 'Expenditure Record edited succesfully';
+                          this.raiseAlert('Expenditure Record edited succesfully','success');
                           this.$emit('expenditureUpdated');
                       });
                 }
@@ -114,6 +118,17 @@
               this.expenditure = response.body;
             });
         },
+
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
+        }
     },
     created: function(){
         if (this.mode === 'Edit'){

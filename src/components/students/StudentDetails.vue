@@ -1,8 +1,9 @@
 <template>
   <div class="details">
     <div class="container">
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
       <router-link class="btn btn-default" :to="{name: 'Students'}">Back</router-link>
-      <Alert v-if="alert" v-bind:message="alert" />
+
     <h1 class="page-header">{{student.name}}
         <span class="pull-right">
             <button type="button" v-if="!additional_details" @click="additional_details=true" class="btn btn-info">More details</button>
@@ -139,7 +140,11 @@ export default {
   data () {
     return {
       student: {},
-      alert: '',
+      alert:{
+        message: '',
+        type: '',
+        raised: false
+      },
       additional_details: false
     }
   },
@@ -153,18 +158,28 @@ export default {
       deleteStudent(id){
           this.$http.delete('http://127.0.0.1:8000/api/student/'+id + '/')
           .then(function(response){
-            this.$router.push({name: 'Students', query: {alert: 'Student Deleted'}});
+            this.$router.push({name: 'Students', query: {alert: 'Student deleted succesfully.'}});
           });
       },
       refetchStudent: function () {
         console.log("feeUpdated called");
           setTimeout(this.fetchStudent,500,this.student.id);
-        },
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
+      }
 
   },
   created: function(){
     if(this.$route.query.alert){
-      this.alert = this.$route.query.alert;
+      this.raiseAlert(this.$route.query.alert,'success');
     };
     this.fetchStudent(this.$route.params.id);
   },

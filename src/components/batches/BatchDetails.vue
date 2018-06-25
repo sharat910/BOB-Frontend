@@ -1,6 +1,7 @@
 <template>
   <div class="details">
     <div class="container">
+      <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <router-link class="btn btn-default" :to="{name: 'Batches'}">Back</router-link>
     <h1 class="page-header">{{batch.summary}}
         <span class="pull-right">
@@ -25,12 +26,18 @@
 
 <script>
 import Students from '@/components/students/Students';
+import Alert from '@/components/Alert';
 
 export default {
   name: 'batchdetails',
   data () {
     return {
-      batch: ''
+      batch: '',
+      alert:{
+        message: '',
+        type: '',
+        raised: false
+      },
     }
   },
   methods:{
@@ -45,13 +52,27 @@ export default {
           .then(function(response){
             this.$router.push({name: 'Batches', query: {alert: 'Batch Deleted'}});
           });
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
       }
   },
   created: function(){
-      this.fetchBatch(this.$route.params.id);
+    if(this.$route.query.alert){
+      this.raiseAlert(this.$route.query.alert,'success');
+    };
+    this.fetchBatch(this.$route.params.id);
   },
   components: {
-    Students
+    Students,
+    Alert
   }
 }
 </script>

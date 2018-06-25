@@ -2,7 +2,7 @@
   <div class="students">
 
   <div class="container">
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 v-if="student_prop == undefined" class="page-header">
       Manage Students
       <span class="pull-right">
@@ -51,7 +51,11 @@
     data () {
       return {
         students: [],
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         filterInput:''
       }
     },
@@ -67,18 +71,29 @@
         return list.filter(function(student){
           return student.name.indexOf(value) > -1;
         });
+      },
+      raiseAlert(message,type){
+        this.alert.message = message;
+        this.alert.type = type;
+        this.alert.raised = true;
+      },
+      closeAlert(){
+        this.alert.message = '';
+        this.alert.type = '';
+        this.alert.raised = false
       }
     },
     created: function(){
-      if(this.$route.query.alert){
-        this.alert = this.$route.query.alert;
-      }
-      if (this.student_prop == undefined) {
-        this.fetchStudents();
-      } else {
-        this.students = this.student_prop;
-      }
-
+      if(this.$route.query.alert)
+        this.raiseAlert(this.$route.query.alert,'success');
+      this.fetchStudents();
+    },
+    watch: {
+      student_prop: function(val){
+        if (val != undefined) {
+          this.students = val;
+        }
+      },
     },
     // updated: function(){
     //   this.fetchStudents();

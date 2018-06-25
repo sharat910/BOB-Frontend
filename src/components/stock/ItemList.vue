@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="container">
-    <Alert v-if="alert.raise" :message="alert.message" :type="alert.type" :show="true"/>
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 class="page-header"> Stock Items
       <span class="pull-right">
         <button type="button" @click="launch_form=true,mode='Add'" class="btn btn-success"
@@ -29,7 +29,7 @@
           <td>{{item.quantity}}</td>
           <td>{{item.reserve_quantity}}</td>
           <td>
-            <TransactionForm :item="item" @alertRaised="alertRaised"/>
+            <TransactionForm :item="item" @alertRaised="raiseAlert"/>
           </td>
           <td><router-link class="btn btn-default" :to="'/stock/item/' + item.id">View</router-link></td>
         </tr>
@@ -69,10 +69,10 @@ export default {
   data() {
       return {
         mode: '',
-        alert: {
+        alert:{
           message: '',
-          type: 'info',
-          raise: false
+          type: '',
+          raised: false
         },
         item_id: 0,
         launch_form: false,
@@ -93,10 +93,15 @@ export default {
     //   var item_index = this.items.find(function (obj) { return obj.id === new_item.id; });
     //   this.items[item_index] = new_item;
     // },
-    alertRaised: function(alert){
-      this.alert.message = alert.message;
-      this.alert.type = alert.type;
-      this.alert.raise = true
+    raiseAlert(message,type){
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.raised = true;
+    },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
     }
   },
   created: function(){

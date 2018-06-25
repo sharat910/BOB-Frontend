@@ -1,8 +1,7 @@
 <template>
     <div class="salaryform">
-    <!-- <TopBar entity='Salary'/> -->
     <!-- <div class="container"> -->
-    <Alert v-if="alert" v-bind:message="alert" />
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postSalary">
 
       <div class="form-group">
@@ -121,7 +120,6 @@
     // Vue.component('multiselect', Multiselect)
 
     import Alert from '@/components/Alert';
-    import TopBar from '@/components/TopBar';
     export default {
     name: 'salaryform',
     props: {
@@ -133,7 +131,11 @@
     data () {
         return {
         salary: {},
-        alert:'',
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
         salary_type: '',
         salary_batch: -1,
         salary_rate: -1,
@@ -177,7 +179,7 @@
         postSalary(e){
             if(!this.salary_type || this.selected_months.length == 0 ||
                 !this.salary.salary_amount || !this.salary.date_of_payment || !this.salary.level){
-                this.alert = 'Please fill in all the fields';
+                this.raiseAlert('Please fill in all the fields','danger');
             } else {
             var month_ids = [];
             if (this.multiple_months == true)
@@ -199,7 +201,7 @@
 
                   this.$http.post('http://localhost:8000/api/salaryrecord/', new_salary)
                       .then(function(response){
-                          this.alert = 'Salary Record added succesfully';
+                          this.raiseAlert('Salary Record added succesfully','success');
                           this.$emit('salaryUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
                       });
@@ -207,7 +209,7 @@
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/salaryrecord/' + this.salary_id + '/', new_salary)
                       .then(function(response){
-                          this.alert = 'Salary Record edited succesfully';
+                          this.raiseAlert('Salary Record edited succesfully','success');
                           this.$emit('salaryUpdated');
                       });
                 }
@@ -259,6 +261,16 @@
             output.push({id: monthids[i],month: this.month_dict[monthids[i]]})
           }
           return output;
+        },
+        raiseAlert(message,type){
+          this.alert.message = message;
+          this.alert.type = type;
+          this.alert.raised = true;
+        },
+        closeAlert(){
+          this.alert.message = '';
+          this.alert.type = '';
+          this.alert.raised = false
         }
     },
     created: function(){
@@ -280,7 +292,7 @@
       },
       salary_type: function(val){
         if (this.num_of_students == -1){
-          this.alert = 'Please select the batch first.'
+          this.raiseAlert('Please select the batch first.','danger');
         }
         if (val === 'Level') {
             this.salary.salary_amount = this.salary_rate*3*this.num_of_students;

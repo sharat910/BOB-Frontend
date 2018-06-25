@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="container">
-    <Alert v-if="alert.raise" :message="alert.message" :type="alert.type" :show="true"/>
+    <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h2 class="page-header"> Transactions
       <span class="pull-right">
         <button type="button" @click="launch_form=true,mode='Add'" class="btn btn-success"
@@ -75,10 +75,10 @@ export default {
   },
   data() {
     return {
-      alert: {
+      alert:{
         message: '',
-        type: 'info',
-        raise: false
+        type: '',
+        raised: false
       },
       transaction_id: 0,
       mode: '',
@@ -154,6 +154,11 @@ export default {
       };
       return result;
     },
+    closeAlert(){
+      this.alert.message = '';
+      this.alert.type = '';
+      this.alert.raised = false
+    }
   },
   components: {
     Alert,
