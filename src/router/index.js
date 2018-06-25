@@ -49,7 +49,8 @@ export default new Router({
     {
       path: '/stock/item/:id',
       name: 'ItemDetails',
-      component: ItemDetails
+      component: ItemDetails,
+      props: true
     },
     {
       path: '/students',
@@ -59,7 +60,8 @@ export default new Router({
     {
       path: '/student/:id',
       name: 'StudentDetails',
-      component: StudentDetails
+      component: StudentDetails,
+      props: true
     },
     {
       path: '/add/student/',
@@ -74,7 +76,8 @@ export default new Router({
       name: 'EditStudent',
       component: StudentForm,
       props: {
-        mode: 'Edit'
+        default: true,
+        mode: 'Edit',
       }
     },
 
@@ -86,7 +89,8 @@ export default new Router({
     {
       path: '/teacher/:id',
       name: 'TeacherDetails',
-      component: TeacherDetails
+      component: TeacherDetails,
+      props: true
     },
     {
       path: '/add/teacher/',
@@ -101,6 +105,7 @@ export default new Router({
       name: 'EditTeacher',
       component: TeacherForm,
       props: {
+        default: true,
         mode: 'Edit'
       }
     },
@@ -113,7 +118,8 @@ export default new Router({
     {
       path: '/batch/:id',
       name: 'BatchDetails',
-      component: BatchDetails
+      component: BatchDetails,
+      props: true
     },
     {
       path: '/add/batch/',
@@ -128,6 +134,7 @@ export default new Router({
       name: 'EditBatch',
       component: BatchForm,
       props: {
+        default: true,
         mode: 'Edit'
       }
     },
