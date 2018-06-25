@@ -6,6 +6,9 @@ import About from '@/components/About'
 import ExpenditureList from '@/components/expenditure/ExpenditureList'
 import Rate from '@/components/admin/Rate'
 
+import ItemList from '@/components/stock/ItemList'
+import ItemDetails from '@/components/stock/ItemDetails'
+
 import Students from '@/components/students/Students'
 import StudentDetails from '@/components/students/StudentDetails'
 import StudentForm from '@/components/students/StudentForm'
@@ -37,6 +40,16 @@ export default new Router({
       path: '/admin',
       name: 'Admin',
       component: Rate
+    },
+    {
+      path: '/stock/items',
+      name: 'ItemList',
+      component: ItemList
+    },
+    {
+      path: '/stock/item/:id',
+      name: 'ItemDetails',
+      component: ItemDetails
     },
     {
       path: '/students',

@@ -1,19 +1,32 @@
 <template>
-  <div class="alert alert-warning alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <div v-if="show" :class="'alert alert-' + type + ' alert-dismissible'" role="alert">
+  <button type="button" class="close" @click="show=false;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     {{message}}
-</div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'alert',
-  props: ['message'],
+  props: {
+    message: String,
+    type: String,
+    show: Boolean
+  },
   data () {
     return {
-
+      // alert_type: 'alert-info',
+      // show: true
     }
-  }
+  },
+  // watch: {
+  //   type: function(val){
+  //     this.alert_type = 'alert-' + val;
+  //   },
+  // },
+  // beforeUpdate() {
+  //   this.show = true;
+  // }
 }
 </script>
 
