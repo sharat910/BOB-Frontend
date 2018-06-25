@@ -1,9 +1,13 @@
 <template>
   <div class="teachers">
-    <TopBar entity='Teacher'/>
   <div class="container">
     <Alert v-if="alert" v-bind:message="alert" />
-    <h1 class="page-header">Manage Teachers</h1>
+    <h1 class="page-header">
+      Manage Teachers
+      <span class="pull-right">
+        <router-link class="btn btn-success" :to="{ name: 'AddTeacher'}">Add Teacher</router-link>
+      </span>
+    </h1>
     <input class="form-control" placeholder="Enter Name" v-model="filterInput">
     <br />
     <table class="table table-striped">
@@ -20,7 +24,7 @@
             <td>{{teacher.id}}</td>
             <td>{{teacher.name}}</td>
             <td>{{teacher.phone}}</td>
-            <td><router-link class="btn btn-default" v-bind:to="'/teacher/'+teacher.id">View</router-link></td>
+            <td><router-link class="btn btn-default" :to="{name: 'TeacherDetails',params: {id: teacher.id}}">View</router-link></td>
           </tr>
         </tbody>
     </table>
@@ -30,7 +34,6 @@
 
 <script>
   import Alert from '@/components/Alert';
-  import TopBar from '@/components/TopBar';
 
   export default {
     name: 'teachers',
@@ -68,7 +71,7 @@
     //   this.fetchTeachers();
     // },
     components: {
-      Alert,TopBar
+      Alert
     }
   }
 </script>

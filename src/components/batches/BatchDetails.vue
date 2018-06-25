@@ -1,12 +1,12 @@
 <template>
   <div class="details">
-    <TopBar entity='Batch'/>
     <div class="container">
+    <router-link class="btn btn-default" :to="{name: 'Batches'}">Back</router-link>
     <h1 class="page-header">{{batch.summary}}
         <span class="pull-right">
-            <router-link class="btn btn-primary" v-bind:to="'/edit/batch/'+batch.id">Edit</router-link>
-            <button class="btn btn-danger" v-on:click="deleteBatch(batch.id)">Delete</button>
-            </span>
+          <router-link class="btn btn-primary" :to="{name:'EditBatch',props: {id:batch.id}}">Edit</router-link>
+          <button class="btn btn-danger" v-on:click="deleteBatch(batch.id)">Delete</button>
+        </span>
     </h1>
     <ul class="list-group">
             <li class="list-group-item"><span class="glyphicon glyphicons-stopwatch" aria-hidden="true"></span>  {{batch.timing}}</li>
@@ -18,15 +18,12 @@
             <li class="list-group-item"><span class="glyphicon glyphicons-woman" aria-hidden="true"></span> {{batch.teacher_name}}</li>
     </ul>
     <br>
-
-    <Students v-bind:student_prop="batch.students" />
-
   </div>
+  <Students v-bind:student_prop="batch.students" />
 </div>
 </template>
 
 <script>
-import TopBar from '@/components/TopBar';
 import Students from '@/components/students/Students';
 
 export default {
@@ -54,7 +51,7 @@ export default {
       this.fetchBatch(this.$route.params.id);
   },
   components: {
-    TopBar,Students
+    Students
   }
 }
 </script>

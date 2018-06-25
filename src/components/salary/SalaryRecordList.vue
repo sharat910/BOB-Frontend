@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="salaryrecords">
+  <div class="salaryrecords container">
     <Alert v-if="alert" v-bind:message="alert" />
     <h2 class="page-header"> Salary Records
       <span class="pull-right">

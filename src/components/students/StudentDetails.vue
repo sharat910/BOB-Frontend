@@ -1,13 +1,13 @@
 <template>
   <div class="details">
-    <TopBar entity="Student"/>
     <div class="container">
+      <router-link class="btn btn-default" :to="{name: 'Students'}">Back</router-link>
       <Alert v-if="alert" v-bind:message="alert" />
     <h1 class="page-header">{{student.name}}
         <span class="pull-right">
             <button type="button" v-if="!additional_details" @click="additional_details=true" class="btn btn-info">More details</button>
-            <button type="button" v-if="additional_details" @click="additional_details=false" class="btn btn-info">Hide details</button>
-            <router-link class="btn btn-primary" v-bind:to="'/edit/student/'+student.id">Edit</router-link>
+            <button type="button" v-else @click="additional_details=false" class="btn btn-info">Hide details</button>
+            <router-link class="btn btn-primary" :to="{name:'EditStudent',props: {id:student.id}}">Edit</router-link>
             <button class="btn btn-danger" v-on:click="deleteStudent(student.id)">Delete</button>
             </span>
     </h1>
@@ -96,17 +96,13 @@
       </div>
     </form>
     <br>
-
+    </div>
     <FeeRecordList :feerecords="student.feerecords" :student_id="student.id" v-on:feeUpdated="refetchStudent()"/>
     <ExamResultList :examresults="student.examresults" :student_id="student.id" v-on:examUpdated="refetchStudent()"/>
-
-
-</div>
 </div>
 </template>
 
 <script>
-import TopBar from '@/components/TopBar';
 import Alert from '@/components/Alert';
 import FeeRecordList from '@/components/fee/FeeRecordList';
 import ExamResultList from '@/components/exam/ExamResultList';
@@ -185,7 +181,6 @@ export default {
     }
   },
   components: {
-    TopBar,
     FeeRecordList,
     ExamResultList,
     Alert

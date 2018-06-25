@@ -1,7 +1,9 @@
 <template>
   <div class="add">
-    <TopBar entity='Teacher'/>
     <div class="container">
+      <router-link v-if="mode==='Add'" class="btn btn-default" :to="{name: 'Teachers'}">Back</router-link>
+      <router-link v-else class="btn btn-default" :to="{name: 'TeacherDetails',params: {'id':id}}">Back</router-link>
+
     <Alert v-if="alert" v-bind:message="alert" />
     <h1 class="page-header">{{mode}} Teacher</h1>
     <br>
@@ -82,7 +84,6 @@
 
 <script>
   import Alert from '@/components/Alert';
-  import TopBar from '@/components/TopBar';
     export default {
     name: 'add',
     props: {
@@ -130,8 +131,13 @@
           this.fetchTeacher(this.$route.params.id);
         }
     },
+    computed: {
+      id: function(){
+        return this.$route.params.id
+      }
+    },
     components: {
-        Alert,TopBar
+      Alert
     }
     }
 </script>

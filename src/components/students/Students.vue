@@ -1,10 +1,20 @@
 <template>
   <div class="students">
-    <TopBar v-if="student_prop == undefined" entity="Student"/>
+
   <div class="container">
     <Alert v-if="alert" v-bind:message="alert" />
-    <h1 v-if="student_prop == undefined" class="page-header">Manage Students</h1>
-    <h2 v-if="student_prop != undefined" class="page-header">Manage Students</h2>
+    <h1 v-if="student_prop == undefined" class="page-header">
+      Manage Students
+      <span class="pull-right">
+        <router-link class="btn btn-success" :to="{ name: 'AddStudent'}">Add Student</router-link>
+      </span>
+    </h1>
+    <h2 v-else class="page-header">
+      Manage Students
+      <span class="pull-right">
+        <router-link class="btn btn-success" :to="{ name: 'AddStudent'}">Add Student</router-link>
+      </span>
+    </h2>
     <input class="form-control" placeholder="Enter Name" v-model="filterInput">
     <br />
     <table class="table table-striped">
@@ -21,7 +31,7 @@
             <td>{{student.id}}</td>
             <td>{{student.name}}</td>
             <td>{{student.batch_details}}</td>
-            <td><router-link class="btn btn-default" v-bind:to="'/student/'+student.id">View</router-link></td>
+            <td><router-link class="btn btn-default" :to="{name: 'StudentDetails',params: {id: student.id}}">View</router-link></td>
           </tr>
         </tbody>
     </table>
@@ -31,7 +41,6 @@
 
 <script>
   import Alert from '@/components/Alert';
-  import TopBar from '@/components/TopBar';
 
   export default {
     name: 'students',
@@ -75,7 +84,7 @@
     //   this.fetchStudents();
     // },
     components: {
-      Alert,TopBar
+      Alert,
     }
   }
 </script>

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="feerecords">
+  <div class="feerecords container">
     <Alert v-if="alert" v-bind:message="alert" />
     <h2 class="page-header"> Fee Records
       <span class="pull-right">

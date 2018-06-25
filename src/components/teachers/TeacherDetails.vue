@@ -1,10 +1,11 @@
 <template>
   <div class="details">
-    <TopBar entity='Teacher'/>
+
     <div class="container">
+    <router-link class="btn btn-default" :to="{name: 'Teachers'}">Back</router-link>
     <h1 class="page-header">{{teacher.name}}
         <span class="pull-right">
-            <router-link class="btn btn-primary" v-bind:to="'/edit/teacher/'+teacher.id">Edit</router-link>
+            <router-link class="btn btn-primary" :to="{name:'EditTeacher',props:{id:teacher.id}}">Edit</router-link>
             <button class="btn btn-danger" v-on:click="deleteTeacher(teacher.id)">Delete</button>
             </span>
     </h1>
@@ -16,24 +17,21 @@
     <ul class="list-group">
             <li class="list-group-item"><span class="glyphicon glyphicons-cup" aria-hidden="true"></span> Trained upto {{teacher.trained_max_level_detail}}</li>
     </ul>
-
-    <SalaryRecordList
-      :teacher_id="this.teacher.id"
-      :batches="this.teacher.batches"
-      :salaryrecords="this.teacher.salaryrecords"
-      />
-
-    <Batches
-      :batch_prop="this.teacher.batches"
-      />
   </div>
+  <SalaryRecordList
+    :teacher_id="this.teacher.id"
+    :batches="this.teacher.batches"
+    :salaryrecords="this.teacher.salaryrecords"
+    />
 
+  <Batches
+    :batch_prop="this.teacher.batches"
+    />
 </div>
 
 </template>
 
 <script>
-import TopBar from '@/components/TopBar';
 import SalaryRecordList from '@/components/salary/SalaryRecordList';
 import Batches from '@/components/batches/Batches'
 
@@ -62,7 +60,6 @@ export default {
       this.fetchTeacher(this.$route.params.id);
   },
   components: {
-    TopBar,
     SalaryRecordList,
     Batches
   }

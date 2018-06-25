@@ -1,10 +1,19 @@
 <template>
   <div class="batches">
-    <TopBar v-if="batch_prop == undefined" entity='Batch'/>
-  <div :class="div_class">
+  <div class="container">
     <Alert v-if="alert" v-bind:message="alert" />
-    <h1 v-if="batch_prop == undefined" class="page-header">Manage Batches</h1>
-    <h2 v-if="batch_prop != undefined" class="page-header">Manage Batches</h2>
+    <h1 v-if="batch_prop == undefined" class="page-header">
+      Manage Batches
+      <span class="pull-right">
+        <router-link class="btn btn-success" :to="{ name: 'AddBatch'}">Add Batch</router-link>
+      </span>
+    </h1>
+    <h2 v-else class="page-header">
+      Manage Batches
+      <span class="pull-right">
+        <router-link class="btn btn-success" :to="{ name: 'AddBatch'}">Add Batch</router-link>
+      </span>
+    </h2>
     <input class="form-control" placeholder="Enter Day" v-model="filterInput">
     <br />
     <table class="table table-striped">
@@ -23,7 +32,7 @@
             <td>{{batch.day}}</td>
             <td>{{batch.timing}}</td>
             <td>{{batch.level_detail}}</td>
-            <td><router-link class="btn btn-default" v-bind:to="'/batch/'+batch.id">View</router-link></td>
+            <td><router-link class="btn btn-default" :to="{name: 'BatchDetails',params: {id: batch.id}}">View</router-link></td>
           </tr>
         </tbody>
     </table>
@@ -33,7 +42,6 @@
 
 <script>
   import Alert from '@/components/Alert';
-  import TopBar from '@/components/TopBar';
 
   export default {
     name: 'batches',
@@ -45,7 +53,6 @@
         batches: [],
         alert:'',
         filterInput:'',
-        div_class: ''
       }
     },
     methods: {
@@ -67,13 +74,11 @@
         this.alert = this.$route.query.alert;
       };
       this.fetchBatches();
-      this.div_class = "container";
     },
     watch: {
       batch_prop: function(val){
         if (val != undefined) {
           this.batches = val;
-          this.div_class = "";
         }
       },
     },
@@ -81,7 +86,7 @@
     //   this.fetchBatches();
     // },
     components: {
-      Alert,TopBar
+      Alert,
     }
   }
 </script>

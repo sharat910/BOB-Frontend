@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="examresults">
+  <div class="examresults container">
     <Alert v-if="alert" v-bind:message="alert" />
     <h2 class="page-header"> Exam Results
       <span class="pull-right">
