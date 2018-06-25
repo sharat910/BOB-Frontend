@@ -175,6 +175,8 @@ export default {
     },
     editTransaction(old_tx,tx,item){
       var quantity = 0;
+      old_tx.quantity = parseInt(old_tx.quantity);
+      tx.quantity = parseInt(tx.quantity);
       var edit_op = ''
       if (old_tx.operation == tx.operation){
 
@@ -215,7 +217,7 @@ export default {
           date: tx.date,
           operation: tx.operation
         };
-        
+
         this.$http.put('http://127.0.0.1:8000/api/transaction/'+this.transaction_id+ '/',new_tx)
         .then(function(response){
           this.raiseAlert('Transaction edited succesfully','success')
