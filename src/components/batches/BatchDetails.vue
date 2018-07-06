@@ -20,7 +20,10 @@
     </ul>
     <br>
   </div>
-  <Students v-bind:student_prop="batch.students" />
+  <Students
+  :isChild="true"
+  :student_prop="batch.students" 
+  />
 </div>
 </template>
 

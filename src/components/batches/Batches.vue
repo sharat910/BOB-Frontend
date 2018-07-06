@@ -2,7 +2,7 @@
   <div class="batches">
   <div class="container">
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
-    <h1 v-if="batch_prop == undefined" class="page-header">
+    <h1 v-if="!usedAsChild" class="page-header">
       Manage Batches
       <span class="pull-right">
         <router-link class="btn btn-success" :to="{ name: 'AddBatch'}">Add Batch</router-link>
@@ -46,7 +46,8 @@
   export default {
     name: 'batches',
     props: {
-      batch_prop: Array
+      batch_prop: Array,
+      isChild: Boolean
     },
     data () {
       return {
@@ -84,21 +85,27 @@
       }
     },
     created: function(){
-      if(this.$route.query.alert){
+      if(this.$route.query.alert && !this.isChild){
         this.raiseAlert(this.$route.query.alert,'success');
       };
-      this.fetchBatches();
+      if (!this.isChild)
+        this.fetchBatches();
     },
     watch: {
       batch_prop: function(val){
         if (val != undefined) {
           this.batches = val;
         }
-      },
+      }
     },
     // updated: function(){
     //   this.fetchBatches();
     // },
+    computed: {
+      usedAsChild: function() {
+        return !(this.batch_prop == undefined)
+      }
+    },
     components: {
       Alert,
     }

@@ -3,7 +3,7 @@
 
   <div class="container">
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
-    <h1 v-if="student_prop == undefined" class="page-header">
+    <h1 v-if="!isChild" class="page-header">
       Manage Students
       <span class="pull-right">
         <router-link class="btn btn-success" :to="{ name: 'AddStudent'}">Add Student</router-link>
@@ -45,7 +45,7 @@
   export default {
     name: 'students',
     props: {
-      batch: Number,
+      isChild: Boolean,
       student_prop: Array
     },
     data () {
@@ -83,17 +83,18 @@
         this.alert.raised = false
       }
     },
-    created: function(){
-      if(this.$route.query.alert)
+    mounted: function(){
+      if(this.$route.query.alert && !this.isChild)
         this.raiseAlert(this.$route.query.alert,'success');
-      this.fetchStudents();
+        if (!this.isChild)
+          this.fetchBatches();
     },
     watch: {
       student_prop: function(val){
         if (val != undefined) {
           this.students = val;
         }
-      },
+      }
     },
     // updated: function(){
     //   this.fetchStudents();

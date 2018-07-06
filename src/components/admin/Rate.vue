@@ -189,7 +189,6 @@ export default {
       this.$http.get('http://localhost:8000/api/' + item + '/')
                     .then(function (response) {
                         this.rates[item] = response.data[0];
-                        //this.rates['form_'+item] = this.formize(response.data[0])
                       });
     },
     formize(obj){

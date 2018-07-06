@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import About from '@/components/About'
 
+import CentreList from '@/components/centre/CentreList'
 import ExpenditureList from '@/components/expenditure/ExpenditureList'
 import Rate from '@/components/admin/Rate'
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/admin',
       name: 'Admin',
       component: Rate
+    },
+    {
+      path: '/centres',
+      name: 'Centres',
+      component: CentreList
     },
     {
       path: '/stock/items',

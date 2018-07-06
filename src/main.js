@@ -35,6 +35,7 @@ new Vue({
             <li><router-link :to="{ name: 'Expenditures'}">Expenditures</router-link></li>
             <li><router-link :to="{ name: 'ItemList'}">Stock</router-link></li>
             <li><router-link :to="{ name: 'Admin'}">Admin</router-link></li>
+            <li><router-link :to="{ name: 'Centres'}">Centres</router-link></li>
             <li><router-link :to="{ name: 'About'}">About</router-link></li>
           </ul>
         </div><!--/.nav-collapse -->

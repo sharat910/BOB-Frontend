@@ -1,9 +1,9 @@
 <template>
     <div class="expenditureform">
-    <!-- <TopBar entity='Salary'/> -->
+    <!-- <TopBar entity='Expenditure'/> -->
     <!-- <div class="container"> -->
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
-    <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postSalary">
+    <form  enctype="multipart/form-data" class="form-horizontal" v-on:submit="postExpenditure">
 
       <div class="form-group ">
 
@@ -84,7 +84,7 @@
       }
     },
     methods: {
-        postSalary(e){
+        postExpenditure(e){
             if(!this.expenditure.date || !this.expenditure.voucher_id ||
                 !this.expenditure.description || !this.expenditure.amount){
                 this.raiseAlert('Please fill in all the fields','danger');
@@ -96,7 +96,7 @@
                       .then(function(response){
                           this.raiseAlert('Expenditure Record added succesfully','success');
                           this.$emit('expenditureUpdated');
-                          // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
+                          // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Expenditure Added'}});
                       });
 
                 } else if (this.mode === 'Edit'){

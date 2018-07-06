@@ -27,6 +27,7 @@
 
   <Batches
     :batch_prop="this.teacher.batches"
+    :isChild="true"
     />
 </div>
 
