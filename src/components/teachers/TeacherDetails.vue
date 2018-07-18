@@ -10,14 +10,33 @@
             <button class="btn btn-danger" v-on:click="deleteTeacher(teacher.id)">Delete</button>
             </span>
     </h1>
-    <ul class="list-group">
-            <li class="list-group-item"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span>  {{teacher.phone}}</li>
-            <li class="list-group-item"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  {{teacher.email}}</li>
-    </ul>
-    <br>
-    <ul class="list-group">
-            <li class="list-group-item"><span class="glyphicon glyphicons-cup" aria-hidden="true"></span> Trained upto {{teacher.trained_max_level_detail}}</li>
-    </ul>
+    <form class="form-horizontal">
+      <div class="well">
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Trained upto </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{teacher.trained_max_level_detail}} </li>
+          </div>
+        </div>
+
+      </div>
+      <div class="well">
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Phone </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{teacher.phone}} </li>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Email </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{teacher.email}} </li>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
   <SalaryRecordList
     :teacher_id="this.teacher.id"

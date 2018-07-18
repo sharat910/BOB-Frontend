@@ -3,26 +3,73 @@
     <div class="container">
       <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <router-link class="btn btn-default" :to="{name: 'Batches'}">Back</router-link>
-    <h1 class="page-header">{{batch.summary}}
+    <h1 class="page-header">{{batch.level_detail}} | {{batch.teacher_name}}
         <span class="pull-right">
           <router-link class="btn btn-primary" :to="{name:'EditBatch',props: {id:batch.id}}">Edit</router-link>
           <button class="btn btn-danger" v-on:click="deleteBatch(batch.id)">Delete</button>
         </span>
     </h1>
-    <ul class="list-group">
-            <li class="list-group-item"><span class="glyphicon glyphicons-stopwatch" aria-hidden="true"></span>  {{batch.timing}}</li>
-            <li class="list-group-item"><span class="glyphicon glyphicons-calendar" aria-hidden="true"></span>  {{batch.day}}</li>
-    </ul>
-    <br>
-    <ul class="list-group">
-            <li class="list-group-item"><span class="glyphicon glyphicons-cup" aria-hidden="true"></span> {{batch.level_detail}}</li>
-            <li class="list-group-item"><span class="glyphicon glyphicons-woman" aria-hidden="true"></span> {{batch.teacher_name}}</li>
-    </ul>
+
+    <form class="form-horizontal">
+      <div class="well">
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Day </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.day}} </li>
+          </div>
+        </div>
+
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Timing </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.timing}} </li>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Centre </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.centre_exp.name}} </li>
+          </div>
+        </div>
+      </div>
+
+      <div class="well">
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Level </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.level_detail}} </li>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Level Start Date</label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.level_start_date}} </li>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="well">
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Teacher </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.teacher_name}} </li>
+          </div>
+        </div>
+
+      </div>
+    </form>
     <br>
   </div>
   <Students
   :isChild="true"
-  :student_prop="batch.students" 
+  :student_prop="batch.students"
   />
 </div>
 </template>
@@ -35,7 +82,9 @@ export default {
   name: 'batchdetails',
   data () {
     return {
-      batch: '',
+      batch: {
+        'centre_exp': {},
+      },
       alert:{
         message: '',
         type: '',

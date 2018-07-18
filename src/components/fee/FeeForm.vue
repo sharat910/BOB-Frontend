@@ -15,7 +15,7 @@
               <option value="Level">Level</option>
               <option value="Month">Month</option>
               <option value="Exam">Exam</option>
-              <option value="Exam">Registration</option>
+              <option value="Registration">Registration</option>
           </select>
         </div>
       </div>
@@ -32,7 +32,29 @@
         </div>
       </div>
 
+      <div class="form-group ">
 
+        <label class="col-sm-2 control-label ">
+          Balance
+        </label>
+
+
+        <div class="col-sm-10">
+          <input name="fee_amount" class="form-control" type="number" v-model="fee.balance" value="">
+        </div>
+      </div>
+
+      <div class="form-group ">
+
+        <label class="col-sm-2 control-label ">
+          Due
+        </label>
+
+
+        <div class="col-sm-10">
+          <input name="fee_amount" class="form-control" type="number" v-model="fee.due" value="">
+        </div>
+      </div>
 
 
       <div class="form-group ">
@@ -136,9 +158,39 @@
 
       </div>
 
+      <div v-if="add_exam_fee" class="form-group">
+
+          <label class="col-sm-2 control-label ">
+            Exam Month
+          </label>
+
+        <div class="col-sm-10">
+          <multiselect
+            v-model="exam_month"
+            :options="months"
+            :multiple="false"
+            :close-on-select="true"
+            :clear-on-select="false"
+            :hide-selected="true"
+            :preserve-search="true"
+            placeholder="Pick one month"
+            label="month"
+            track-by="month">
+          </multiselect>
+        </div>
+
+      </div>
+
+      <!-- <div class="form-actions">
+        <button v-if="!add_exam_fee && mode==='Add'" @click="add_exam_fee=true"class="btn btn-primary" title="Add Exam fee along with Level fee">Add exam fee</button>
+        <button v-else @click="add_exam_fee=false"class="btn btn-primary" title="Remove Exam fee along with Level fee">Remove exam fee</button>
+      </div> -->
+
         <div class="form-actions">
           <button class="btn btn-primary" title="Make a POST request on the Fee Record List resource">POST</button>
         </div>
+
+
 
 
     </form>
@@ -159,16 +211,20 @@
       mode: String,
       student_id: Number,
       fee_id: Number,
-      alert:{
-        message: '',
-        type: '',
-        raised: false
-      },
     },
     data () {
         return {
-        fee: {},
-        alert:'',
+        fee: {
+          balance: 0,
+          due: 0
+        },
+        add_exam_fee: false,
+        exam_month: {},
+        alert:{
+          message: '',
+          type: '',
+          raised: false
+        },
 
         fee_type: '',
         feerates: {},
@@ -209,7 +265,7 @@
     },
     methods: {
         postFee(e){
-            if(!this.fee_type || this.selected_months.length == 0 ||
+            if(!this.fee_type ||
                 !this.fee.fee_amount || !this.fee.fee_receipt_no ||
                 !this.fee.level || !this.fee.date_of_payment){
                 this.raiseAlert('Please fill in all the fields','danger');
@@ -225,6 +281,8 @@
               var new_fee = {
                 fee_type: this.fee_type,
                 fee_amount: this.fee.fee_amount,
+                balance: this.fee.balance,
+                due: this.fee.due,
                 fee_receipt_no: this.fee.fee_receipt_no,
                 student: this.student_id,
                 level: this.fee.level,
@@ -239,6 +297,28 @@
                           this.$emit('feeUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
                       });
+
+                  if (this.add_exam_fee) {
+                    var exam_month_ids = [];
+                    exam_month_ids.push(this.exam_month.id);
+                    var new_exam_fee = {
+                      fee_type: "Exam",
+                      fee_amount: this.feerates.exam_fee,
+                      balance: 0,
+                      due: 0,
+                      fee_receipt_no: this.fee.fee_receipt_no,
+                      student: this.student_id,
+                      level: this.fee.level,
+                      date_of_payment: this.fee.date_of_payment,
+                      months: exam_month_ids
+                    };
+                    this.$http.post('http://localhost:8000/api/feerecord/', new_exam_fee)
+                        .then(function(response){
+                            this.raiseAlert('Exam Fee Record added succesfully','success');
+                            this.$emit('feeUpdated');
+                            // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
+                        });
+                  }
 
                 } else if (this.mode === 'Edit'){
                   this.$http.put('http://localhost:8000/api/feerecord/' + this.fee_id + '/', new_fee)

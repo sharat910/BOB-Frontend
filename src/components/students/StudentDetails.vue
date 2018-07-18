@@ -14,6 +14,15 @@
     </h1>
     <form class="form-horizontal">
       <div class="well">
+
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Code </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{student.code}} </li>
+          </div>
+        </div>
+
+
         <div class="form-group ">
           <label class="col-sm-2 control-label "> Batch Details </label>
           <div class="col-sm-10">

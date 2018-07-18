@@ -20,7 +20,7 @@
     <table class="table table-striped">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Code</th>
             <th>Name</th>
             <th>Batch</th>
             <th></th>
@@ -28,7 +28,7 @@
         </thead>
         <tbody>
           <tr v-for="student in filterBy(students, filterInput)">
-            <td>{{student.id}}</td>
+            <td>{{student.code}}</td>
             <td>{{student.name}}</td>
             <td>{{student.batch_details}}</td>
             <td><router-link class="btn btn-default" :to="{name: 'StudentDetails',params: {id: student.id}}">View</router-link></td>
@@ -87,7 +87,7 @@
       if(this.$route.query.alert && !this.isChild)
         this.raiseAlert(this.$route.query.alert,'success');
         if (!this.isChild)
-          this.fetchBatches();
+          this.fetchStudents();
     },
     watch: {
       student_prop: function(val){

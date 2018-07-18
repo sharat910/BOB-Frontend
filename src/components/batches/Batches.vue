@@ -23,6 +23,7 @@
             <th>Day</th>
             <th>Timing</th>
             <th>Level</th>
+            <th>Centre</th>
             <th></th>
           </tr>
         </thead>
@@ -32,6 +33,7 @@
             <td>{{batch.day}}</td>
             <td>{{batch.timing}}</td>
             <td>{{batch.level_detail}}</td>
+            <td>{{batch.centre_exp.name}}</td>
             <td><router-link class="btn btn-default" :to="{name: 'BatchDetails',params: {id: batch.id}}">View</router-link></td>
           </tr>
         </tbody>
