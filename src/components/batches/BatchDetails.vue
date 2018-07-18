@@ -77,6 +77,7 @@
 <script>
 import Students from '@/components/students/Students';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'batchdetails',
@@ -94,16 +95,20 @@ export default {
   },
   methods:{
       fetchBatch(id){
-          this.$http.get('http://127.0.0.1:8000/api/batch/'+id + '/')
-          .then(function(response){
-            this.batch = response.body;
-          });
+          restAPI.get('batch/'+id + '/')
+          .then(response => {
+            this.batch = response.data;
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       deleteBatch(id){
-          this.$http.delete('http://127.0.0.1:8000/api/batch/'+id + '/')
-          .then(function(response){
+          restAPI.delete('batch/'+id + '/')
+          .then(response => {
             this.$router.push({name: 'Batches', query: {alert: 'Batch Deleted'}});
-          });
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       raiseAlert(message,type){
         this.alert.message = message;

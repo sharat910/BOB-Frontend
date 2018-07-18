@@ -44,6 +44,7 @@
 
 <script>
   import Alert from '@/components/Alert';
+  import {restAPI} from '@/services/rest-api';
 
   export default {
     name: 'batches',
@@ -64,10 +65,12 @@
     },
     methods: {
       fetchBatches(){
-        this.$http.get('http://127.0.0.1:8000/api/batch/')
-          .then(function(response){
-            this.batches = response.body;
-          });
+        restAPI.get('batch/')
+        .then(response => {
+          this.batches = response.data;
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
       },
       filterBy(list, value){
         value = value.charAt(0).toUpperCase() + value.slice(1);

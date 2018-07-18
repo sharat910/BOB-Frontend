@@ -130,6 +130,7 @@
 
 <script>
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 //Helper functions to get useful attributes
 function pick(obj, keys) {
     return keys.map(k => k in obj ? {[k]: obj[k]} : {})
@@ -186,10 +187,12 @@ export default {
       this.fetch('royaltyrate');
     },
     fetch(item){
-      this.$http.get('http://localhost:8000/api/' + item + '/')
-                    .then(function (response) {
-                        this.rates[item] = response.data[0];
-                      });
+      restAPI.get(item + '/')
+        .then(response => {
+            this.rates[item] = response.data[0];
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
     },
     formize(obj){
       var new_obj = {};
@@ -204,10 +207,12 @@ export default {
     },
     save(item){
       this.attr[item].edit = false;
-      this.$http.put('http://localhost:8000/api/' + item + '/1/',this.rates[item])
-                    .then(function (response) {
-                        this.raiseAlert(capitalize_first_letter(item.slice(0,-4)) + ' ' + item.slice(-4) + ' edited','success');
-                      });
+      restAPI.put(item + '/1/',this.rates[item])
+        .then(response => {
+              this.raiseAlert(capitalize_first_letter(item.slice(0,-4)) + ' ' + item.slice(-4) + ' edited','success');
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     raiseAlert(message,type){
       this.alert.message = message;

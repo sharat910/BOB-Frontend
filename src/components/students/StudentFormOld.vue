@@ -247,13 +247,13 @@
         fetchBatches(){
           this.$http.get('http://localhost:8000/api/batch/')
           .then(function(response){
-            this.batches = response.body;
+            this.batches = response.data;
           });
         },
         fetchStudent(id){
             this.$http.get('http://127.0.0.1:8000/api/student/'+id)
             .then(function(response){
-              this.student = response.body;
+              this.student = response.data;
             });
         },
         raiseAlert(message,type){

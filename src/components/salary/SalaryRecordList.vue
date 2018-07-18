@@ -68,6 +68,7 @@
 
 import SalaryForm from '@/components/salary/SalaryForm';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'salaryrecordlist',
@@ -91,10 +92,12 @@ export default {
   },
   methods: {
     deleteSalaryRecord(id){
-        this.$http.delete('http://127.0.0.1:8000/api/salaryrecord/'+id + '/')
-        .then(function(response){
+        restAPI.delete('salaryrecord/'+id + '/')
+        .then(response => {
           this.raiseAlert('Salary record deleted succesfully','success');
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     raiseAlert(message,type){
       this.alert.message = message;

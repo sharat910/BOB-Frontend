@@ -116,6 +116,7 @@
 import Alert from '@/components/Alert';
 import FeeRecordList from '@/components/fee/FeeRecordList';
 import ExamResultList from '@/components/exam/ExamResultList';
+import {restAPI} from '@/services/rest-api';
 
 //Helper functions to get useful attributes
 function pick(obj, keys) {
@@ -159,16 +160,20 @@ export default {
   },
   methods:{
       fetchStudent(id){
-          this.$http.get('http://127.0.0.1:8000/api/student/'+id + '/')
-          .then(function(response){
-            this.student = response.body;
-          });
+          restAPI.get('student/'+id + '/')
+          .then(response => {
+            this.student = response.data;
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       deleteStudent(id){
-          this.$http.delete('http://127.0.0.1:8000/api/student/'+id + '/')
-          .then(function(response){
+          restAPI.delete('student/'+id + '/')
+          .then(response => {
             this.$router.push({name: 'Students', query: {alert: 'Student deleted succesfully.'}});
-          });
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       refetchStudent: function () {
         console.log("feeUpdated called");

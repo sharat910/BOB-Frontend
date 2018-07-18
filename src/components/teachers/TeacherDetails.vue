@@ -42,6 +42,7 @@
     :teacher_id="this.teacher.id"
     :batches="this.teacher.batches"
     :salaryrecords="this.teacher.salaryrecords"
+    @salaryUpdated="refetchTeacher()"
     />
 
   <Batches
@@ -56,6 +57,7 @@
 import SalaryRecordList from '@/components/salary/SalaryRecordList';
 import Batches from '@/components/batches/Batches';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'teacherdetails',
@@ -71,16 +73,24 @@ export default {
   },
   methods:{
       fetchTeacher(id){
-          this.$http.get('http://127.0.0.1:8000/api/teacher/'+id + '/')
-          .then(function(response){
-            this.teacher = response.body;
-          });
+          restAPI.get('teacher/'+id + '/')
+          .then(response => {
+            this.teacher = response.data;
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
+      },
+      refetchTeacher: function () {
+        console.log("salaryUpdated called");
+          setTimeout(this.fetchTeacher,500,this.teacher.id);
       },
       deleteTeacher(id){
-          this.$http.delete('http://127.0.0.1:8000/api/teacher/'+id + '/')
-          .then(function(response){
+          restAPI.delete('teacher/'+id + '/')
+          .then(response => {
             this.$router.push({name: 'Teachers', query: {alert: 'Teacher Deleted'}});
-          });
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       raiseAlert(message,type){
         this.alert.message = message;

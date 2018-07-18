@@ -88,6 +88,7 @@
 
 <script>
     import Alert from '@/components/Alert';
+    import {restAPI} from '@/services/rest-api';
 
     export default {
     name: 'itemform',
@@ -115,19 +116,23 @@
               if (this.mode === 'Add') {
                   this.item.quantity = 0;
                   this.item.reserve_quantity = 0;
-                  this.$http.post('http://localhost:8000/api/item/', this.item)
-                      .then(function(response){
+                  restAPI.post('item/', this.item)
+                      .then(response => {
                           this.raiseAlert('Item Record added succesfully','success');
                           this.$emit('itemUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
-                      });
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
 
                 } else if (this.mode === 'Edit'){
-                  this.$http.put('http://localhost:8000/api/item/' + this.item_id + '/', this.item)
-                      .then(function(response){
+                  restAPI.put('item/' + this.item_id + '/', this.item)
+                      .then(response => {
                           this.raiseAlert('Item Record edited succesfully','success');
                           this.$emit('itemUpdated');
-                      });
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
                 }
 
                 e.preventDefault();
@@ -136,10 +141,12 @@
         },
 
         fetchItem(id){
-            this.$http.get('http://127.0.0.1:8000/api/item/'+id + '/')
-            .then(function(response){
-              this.item = response.body;
-            });
+            restAPI.get('item/'+id + '/')
+            .then(response => {
+              this.item = response.data;
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
         },
         raiseAlert(message,type){
           this.alert.message = message;

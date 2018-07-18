@@ -75,6 +75,7 @@
 
 <script>
     import Alert from '@/components/Alert';
+    import {restAPI} from '@/services/rest-api';
 
     export default {
     name: 'examform',
@@ -108,18 +109,22 @@
               };
               if (this.mode === 'Add') {
 
-                  this.$http.post('http://localhost:8000/api/examresult/', new_exam)
-                      .then(function(response){
+                  restAPI.post('examresult/', new_exam)
+                      .then(response => {
                           this.raiseAlert('Exam Result added succesfully.','success');
                           this.$emit('examUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Exam Added'}});
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
                       });
 
                 } else if (this.mode === 'Edit'){
-                  this.$http.put('http://localhost:8000/api/examresult/' + this.exam_id + '/', new_exam)
-                      .then(function(response){
+                  restAPI.put('examresult/' + this.exam_id + '/', new_exam)
+                      .then(response => {
                           this.raiseAlert('Exam Result edited succesfully.','success');
                           this.$emit('examUpdated');
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
                       });
                 }
 
@@ -130,9 +135,9 @@
 
         fetchExam(id){
             console.log("In fetch exam")
-            this.$http.get('http://127.0.0.1:8000/api/examresult/'+id + '/')
-            .then(function(response){
-              this.exam = response.body;
+            restAPI.get('examresult/'+id + '/')
+            .then(response => {
+              this.exam = response.data;
             });
         },
         raiseAlert(message,type){

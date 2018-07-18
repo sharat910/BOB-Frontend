@@ -63,6 +63,7 @@
 import ItemForm from '@/components/stock/ItemForm';
 import TransactionForm from '@/components/stock/TransactionForm';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'stockitemlist',
@@ -81,10 +82,12 @@ export default {
   },
   methods: {
     fetchItems(){
-      this.$http.get('http://127.0.0.1:8000/api/item/')
-      .then(function(response){
+      restAPI.get('item/')
+      .then(response => {
         this.items = response.data;
-      });
+      }).catch(e => {
+        console.error(e);console.error(e.response)
+      })
     },
     waitAndFetchItems(){
       setTimeout(this.fetchItems,300);

@@ -71,7 +71,7 @@
                         this.raiseAlert(this.resource + ' added succesfully','success');
                         this.$emit('resourceUpdated');
                     }).catch(e => {
-                      console.error(e)
+                      console.error(e);console.error(e.response)
                     });
 
             } else if (this.mode === 'Edit'){
@@ -80,7 +80,7 @@
                       this.raiseAlert(this.resource + ' edited succesfully','success');
                       this.$emit('resourceUpdated');
                   }).catch(e => {
-                    console.error(e)
+                    console.error(e);console.error(e.response)
                   });
             }
         },
@@ -90,7 +90,7 @@
             .then(response => {
               this.model = response.data;
             }).catch(e => {
-              console.error(e)
+              console.error(e);console.error(e.response)
             });
         },
         setRelatedResourcesSchema(model_name,resource_name,val){
@@ -122,7 +122,7 @@
                 this.schema.fields.push(field);
               }
             }).catch(e => {
-              console.error(e)
+              console.error(e);console.error(e.response)
             });
         },
         fetchFormData(){
@@ -130,7 +130,7 @@
           .then(response => {
             this.setFormSchema(response.data,[],this.postResource);
           }).catch(e => {
-            console.error(e)
+            console.error(e);console.error(e.response)
           });
         },
         setFormSchema(options_data){

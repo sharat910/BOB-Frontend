@@ -65,6 +65,7 @@
 
 <script>
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'transactionform',
@@ -106,14 +107,16 @@ export default {
     },
 
     fetchTransaction(id){
-      this.$http.get('http://127.0.0.1:8000/api/transaction/'+id + '/')
-      .then(function(response){
-        this.old_tx = Object.assign({},response.body);
-        this.old_tx['quantity'] = response.body['tx_quantity'];
-        this.tx.quantity = response.body['tx_quantity'];
-        this.tx.operation = response.body['operation'];
-        this.tx.date = response.body['date'];
-      });
+      restAPI.get('transaction/'+id + '/')
+      .then(response => {
+        this.old_tx = Object.assign({},response.data);
+        this.old_tx['quantity'] = response.data['tx_quantity'];
+        this.tx.quantity = response.data['tx_quantity'];
+        this.tx.operation = response.data['operation'];
+        this.tx.date = response.data['date'];
+      }).catch(e => {
+        console.error(e);console.error(e.response)
+      })
     },
     performQuickTransaction(tx_op,date=null){
       if (this.tx.quantity == 0)
@@ -133,10 +136,12 @@ export default {
         item: this.item.id
       };
       // console.log(tx);
-      this.$http.post('http://localhost:8000/api/transaction/', tx)
-          .then(function(response){
+      restAPI.post('transaction/', tx)
+          .then(response => {
             this.emitAlert('Item: ' + this.item.description + '  |  Quantity updated succesfully','success');
-          });
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
     },
     editStockItem(tx_op,tx_quantity,item,mute_alerts=false){
       var result = true;
@@ -172,10 +177,12 @@ export default {
         }
       }
       if (result != false){
-        this.$http.put('http://localhost:8000/api/item/' + item.id + '/', item)
-            .then(function(response){
+        restAPI.put('item/' + item.id + '/', item)
+            .then(response => {
               this.emitAlert('Item: ' + item.description + '  |  Quantity edited','info');
-            });
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
 
       };
       return result;
@@ -225,18 +232,16 @@ export default {
           operation: tx.operation
         };
 
-        this.$http.put('http://127.0.0.1:8000/api/transaction/'+this.transaction_id+ '/',new_tx)
-        .then(function(response){
+        restAPI.put('transaction/'+this.transaction_id+ '/',new_tx)
+        .then(response => {
           this.emitAlert('Transaction edited succesfully','success')
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
       }
     },
     emitAlert(alert_message,alert_type){
-      var alert = {
-        message: alert_message,
-        type: alert_type
-      }
-      this.$emit('alertRaised',alert);
+      this.$emit('alertRaised',alert_message,alert_type);
     },
     raiseAlert(message,type){
       this.alert.message = message;

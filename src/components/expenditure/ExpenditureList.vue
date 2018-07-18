@@ -62,6 +62,7 @@
 
 import ExpenditureForm from '@/components/expenditure/ExpenditureForm';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'expenditurerecordlist',
@@ -80,17 +81,21 @@ export default {
   },
   methods: {
     deleteExpenditureRecord(id){
-        this.$http.delete('http://127.0.0.1:8000/api/expenditure/'+id + '/')
-        .then(function(response){
+        restAPI.delete('expenditure/'+id + '/')
+        .then(response => {
           this.raiseAlert('Expenditure record deleted succesfully');
           this.waitAndFetchExpenditures();
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     fetchExpenditures(){
-      this.$http.get('http://127.0.0.1:8000/api/expenditure/')
-      .then(function(response){
+      restAPI.get('expenditure/')
+      .then(response => {
         this.expenditures = response.data;
-      });
+      }).catch(e => {
+        console.error(e);console.error(e.response)
+      })
     },
     waitAndFetchExpenditures(){
       setTimeout(this.fetchExpenditures,300);

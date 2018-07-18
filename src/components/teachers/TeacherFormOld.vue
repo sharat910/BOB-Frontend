@@ -127,7 +127,7 @@
         fetchTeacher(id){
             this.$http.get('http://127.0.0.1:8000/api/teacher/'+id)
             .then(function(response){
-              this.teacher = response.body;
+              this.teacher = response.data;
             });
         },
 

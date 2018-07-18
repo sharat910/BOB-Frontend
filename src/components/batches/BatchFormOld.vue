@@ -174,14 +174,14 @@
         fetchBatch(id){
             this.$http.get('http://127.0.0.1:8000/api/batch/'+id)
             .then(function(response){
-              this.batch = response.body;
+              this.batch = response.data;
             });
         },
 
         fetchTeachers(){
           this.$http.get('http://127.0.0.1:8000/api/teacher/')
             .then(function(response){
-              this.teachers = response.body;
+              this.teachers = response.data;
             });
         },
         raiseAlert(message,type){

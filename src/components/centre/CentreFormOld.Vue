@@ -58,7 +58,7 @@
                           this.raiseAlert('Centre added succesfully','success');
                           this.$emit('centreUpdated');
                       }).catch(e => {
-                        console.error(e)
+                        console.error(e);console.error(e.response)
                       });
 
                 } else if (this.mode === 'Edit'){
@@ -67,14 +67,14 @@
                           this.raiseAlert('Centre edited succesfully','success');
                           this.$emit('centreUpdated');
                       }).catch(e => {
-                        console.error(e)
+                        console.error(e);console.error(e.response)
                       });
                 }
         },
         fetchCentre(id){
             this.$http.get('http://127.0.0.1:8000/api/centre/'+id + '/')
             .then(function(response){
-              this.centre = response.body;
+              this.centre = response.data;
             });
         },
         fetchFormData(){
@@ -82,7 +82,7 @@
           .then(response => {
             this.setFormSchema(response.data,[],this.postCentre);
           }).catch(e => {
-            console.error(e)
+            console.error(e);console.error(e.response)
           });
         },
         setFormSchema(options_data,exclude_fields=[]){

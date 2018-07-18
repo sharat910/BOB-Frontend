@@ -34,6 +34,7 @@
 
 <script>
   import Alert from '@/components/Alert';
+  import {restAPI} from '@/services/rest-api';
 
   export default {
     name: 'teachers',
@@ -53,10 +54,12 @@
     },
     methods: {
       fetchTeachers(){
-        this.$http.get('http://127.0.0.1:8000/api/teacher/')
-          .then(function(response){
-            this.teachers = response.body;
-          });
+        restAPI.get('teacher/')
+          .then(response => {
+            this.teachers = response.data;
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
       },
       filterBy(list, value){
         value = value.charAt(0).toUpperCase() + value.slice(1);

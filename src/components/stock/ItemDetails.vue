@@ -124,6 +124,7 @@
 import Alert from '@/components/Alert';
 import TransactionList from '@/components/stock/TransactionList';
 import TransactionForm from '@/components/stock/TransactionForm';
+import {restAPI} from '@/services/rest-api';
 
 export default {
 name: 'itemdetails',
@@ -141,23 +142,29 @@ data () {
 },
 methods:{
     fetchItem(id){
-        this.$http.get('http://127.0.0.1:8000/api/item/'+id + '/')
-        .then(function(response){
-          this.item = response.body;
-        });
+        restAPI.get('item/'+id + '/')
+        .then(response => {
+          this.item = response.data;
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     editItem(){
-      this.$http.put('http://localhost:8000/api/item/' + this.item.id + '/', this.item)
-          .then(function(response){
+      restAPI.put('item/' + this.item.id + '/', this.item)
+          .then(response => {
               this.raiseAlert('Stock Item details edited succesfully.','success');
               this.refetchItem();
-          });
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
     },
     deleteItem(id){
-        this.$http.delete('http://127.0.0.1:8000/api/item/'+id + '/')
-        .then(function(response){
+        restAPI.delete('item/'+id + '/')
+        .then(response => {
           this.$router.push({name: 'Items', query: {alert: 'Stock item deleted succesfully'}});
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     refetchItem: function () {
         setTimeout(this.fetchItem,500,this.item.id);

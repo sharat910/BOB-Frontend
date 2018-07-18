@@ -32,6 +32,35 @@
         </div>
       </div>
 
+      <div class="form-group">
+
+          <label class="col-sm-2 control-label ">
+            Level
+          </label>
+
+
+        <div class="col-sm-10">
+          <select class="form-control" name="level" v-model="salary.level">
+
+              <option value="" selected="">--------</option>
+                  <option value="1">Level-1</option>
+                  <option value="2">Level-2</option>
+                  <option value="3">Level-3</option>
+                  <option value="4">Level-4</option>
+                  <option value="5">Level-5</option>
+                  <option value="6">Level-6</option>
+                  <option value="7">Level-7</option>
+                  <option value="8">Level-8</option>
+                  <option value="9">Level-9</option>
+                  <option value="10">Level-10</option>
+                  <option value="11">Module-1</option>
+                  <option value="12">Module-2</option>
+                  <option value="13">Module-3</option>
+                  <option value="14">Module-4</option>
+          </select>
+        </div>
+      </div>
+
       <div class="form-group ">
 
         <label class="col-sm-2 control-label ">
@@ -41,6 +70,30 @@
 
         <div class="col-sm-10">
           <input name="salary_amount" class="form-control" type="number" v-model="salary.salary_amount" value="">
+        </div>
+      </div>
+
+      <div class="form-group ">
+
+        <label class="col-sm-2 control-label ">
+          Balance
+        </label>
+
+
+        <div class="col-sm-10">
+          <input name="fee_amount" class="form-control" type="number" v-model="salary.balance" value="">
+        </div>
+      </div>
+
+      <div class="form-group ">
+
+        <label class="col-sm-2 control-label ">
+          Due
+        </label>
+
+
+        <div class="col-sm-10">
+          <input name="salary_amount" class="form-control" type="number" v-model="salary.due" value="">
         </div>
       </div>
 
@@ -118,7 +171,7 @@
 
     import Multiselect from 'vue-multiselect';
     // Vue.component('multiselect', Multiselect)
-
+    import {restAPI} from '@/services/rest-api';
     import Alert from '@/components/Alert';
     export default {
     name: 'salaryform',
@@ -130,7 +183,10 @@
     },
     data () {
         return {
-        salary: {},
+        salary: {
+          balance: 0,
+          due: 0
+        },
         alert:{
           message: '',
           type: '',
@@ -191,27 +247,34 @@
 
               var new_salary = {
                 salary_type: this.salary_type,
+                batch: this.salary_batch,
                 salary_amount: this.salary.salary_amount,
                 date_of_payment: this.salary.date_of_payment,
                 teacher: this.teacher_id,
                 level: this.salary.level,
+                due: this.salary.due,
+                balance: this.salary.balance,
                 months: month_ids
               };
               if (this.mode === 'Add') {
 
-                  this.$http.post('http://localhost:8000/api/salaryrecord/', new_salary)
-                      .then(function(response){
+                  restAPI.post('salaryrecord/', new_salary)
+                      .then(response => {
                           this.raiseAlert('Salary Record added succesfully','success');
                           this.$emit('salaryUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
-                      });
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
 
                 } else if (this.mode === 'Edit'){
-                  this.$http.put('http://localhost:8000/api/salaryrecord/' + this.salary_id + '/', new_salary)
-                      .then(function(response){
+                  restAPI.put('salaryrecord/' + this.salary_id + '/', new_salary)
+                      .then(response => {
                           this.raiseAlert('Salary Record edited succesfully','success');
                           this.$emit('salaryUpdated');
-                      });
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
                 }
 
                 e.preventDefault();
@@ -221,23 +284,27 @@
 
         fetchSalary(id){
             console.log("In fetch salary")
-            this.$http.get('http://127.0.0.1:8000/api/salaryrecord/'+id + '/')
-            .then(function(response){
-              this.salary = response.body;
+            restAPI.get('salaryrecord/'+id + '/')
+            .then(response => {
+              this.salary = response.data;
               this.salary_type = this.salary.salary_type;
               this.salary_batch = this.salary.batch;
               if (this.salary_type==="Level")
                 this.selected_months = this.generateMonths(this.salary.months);
               else
                 this.selected_month = this.generateMonths(this.salary.months)[0];
-            });
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
         },
 
         fetchSalaryRate(){
-          this.$http.get('http://127.0.0.1:8000/api/salaryrate/1/')
-          .then(function(response){
-            this.salary_rate = response.body['salary_rate'];
-          });
+          restAPI.get('salaryrate/1/')
+          .then(response => {
+            this.salary_rate = response.data['salary_rate'];
+          }).catch(e => {
+            console.error(e);console.error(e.response)
+          })
         },
 
         extractMonthIds(months){

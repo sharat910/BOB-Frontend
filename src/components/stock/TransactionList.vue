@@ -66,6 +66,7 @@
 <script>
 import TransactionForm from '@/components/stock/TransactionForm';
 import Alert from '@/components/Alert'
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'transactionlist',
@@ -104,10 +105,12 @@ export default {
       var edit_op = (tx.operation === 'Add') ? 'Remove':'Add';
       console.log("edit op",edit_op)
       if (this.editStockItem(edit_op,tx.tx_quantity,this.item)){
-        this.$http.delete('http://localhost:8000/api/transaction/' + tx.id + '/')
-        .then(function(response){
+        restAPI.delete('transaction/' + tx.id + '/')
+        .then(response => {
           this.raiseAlert('Transaction deleted succesfully','success');
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
       }
       else
         raiseAlert('Transaction delete failed','danger');
@@ -146,10 +149,12 @@ export default {
         }
       }
       if (result != false){
-        this.$http.put('http://localhost:8000/api/item/' + item.id + '/', item)
-            .then(function(response){
+        restAPI.put('item/' + item.id + '/', item)
+            .then(response => {
               this.raiseAlert('Item: ' + item.description + '  |  Quantity edited','info');
-            });
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
 
       };
       return result;

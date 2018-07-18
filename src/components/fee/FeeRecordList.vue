@@ -67,6 +67,7 @@
 
 import FeeForm from '@/components/fee/FeeForm';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'feerecordlist',
@@ -89,10 +90,12 @@ export default {
   },
   methods: {
     deleteFeeRecord(id){
-        this.$http.delete('http://127.0.0.1:8000/api/feerecord/'+id + '/')
-        .then(function(response){
+        restAPI.delete('http://127.0.0.1:8000/api/feerecord/'+id + '/')
+        .then(response => {
           this.raiseAlert('Fee record deleted succesfully','success');
-        });
+        }).catch(e => {
+          console.error(e);console.error(e.response)
+        })
     },
     raiseAlert(message,type){
       this.alert.message = message;

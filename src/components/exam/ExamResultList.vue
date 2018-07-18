@@ -63,6 +63,7 @@
 
 import ExamForm from '@/components/exam/ExamForm';
 import Alert from '@/components/Alert';
+import {restAPI} from '@/services/rest-api';
 
 export default {
   name: 'examresultlist',
@@ -85,9 +86,11 @@ export default {
   },
   methods: {
     deleteExamResult(id){
-        this.$http.delete('http://127.0.0.1:8000/api/examresult/'+id + '/')
-        .then(function(response){
+        restAPI.delete('examresult/'+id + '/')
+        .then(response => {
           this.raiseAlert('Exam result deleted succesfully.','success');
+        }).catch(e => {
+          console.error(e);console.error(e.response)
         });
     },
     raiseAlert(message,type){

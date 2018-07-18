@@ -66,6 +66,7 @@
 
 <script>
     import Alert from '@/components/Alert';
+    import {restAPI} from '@/services/rest-api';
 
     export default {
     name: 'expenditureform',
@@ -92,18 +93,22 @@
 
               if (this.mode === 'Add') {
 
-                  this.$http.post('http://localhost:8000/api/expenditure/', this.expenditure)
-                      .then(function(response){
+                  restAPI.post('expenditure/', this.expenditure)
+                      .then(response => {
                           this.raiseAlert('Expenditure Record added succesfully','success');
                           this.$emit('expenditureUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Expenditure Added'}});
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
                       });
 
                 } else if (this.mode === 'Edit'){
-                  this.$http.put('http://localhost:8000/api/expenditure/' + this.expenditure_id + '/', this.expenditure)
-                      .then(function(response){
+                  restAPI.put('expenditure/' + this.expenditure_id + '/', this.expenditure)
+                      .then(response => {
                           this.raiseAlert('Expenditure Record edited succesfully','success');
                           this.$emit('expenditureUpdated');
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
                       });
                 }
 
@@ -113,9 +118,11 @@
         },
 
         fetchExpenditure(id){
-            this.$http.get('http://127.0.0.1:8000/api/expenditure/'+id + '/')
-            .then(function(response){
-              this.expenditure = response.body;
+            restAPI.get('expenditure/'+id + '/')
+            .then(response => {
+              this.expenditure = response.data;
+            }).catch(e => {
+              console.error(e);console.error(e.response)
             });
         },
 

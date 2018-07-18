@@ -158,33 +158,15 @@
 
       </div>
 
-      <div v-if="add_exam_fee" class="form-group">
-
-          <label class="col-sm-2 control-label ">
-            Exam Month
-          </label>
+      <div v-if="fee_type==='Level'"class="form-actions">
+        <label class="col-sm-2 control-label ">
+          Append Exam Fee
+        </label>
 
         <div class="col-sm-10">
-          <multiselect
-            v-model="exam_month"
-            :options="months"
-            :multiple="false"
-            :close-on-select="true"
-            :clear-on-select="false"
-            :hide-selected="true"
-            :preserve-search="true"
-            placeholder="Pick one month"
-            label="month"
-            track-by="month">
-          </multiselect>
+          <input type="checkbox" id="checkbox" v-model="add_exam_fee">
         </div>
-
       </div>
-
-      <!-- <div class="form-actions">
-        <button v-if="!add_exam_fee && mode==='Add'" @click="add_exam_fee=true"class="btn btn-primary" title="Add Exam fee along with Level fee">Add exam fee</button>
-        <button v-else @click="add_exam_fee=false"class="btn btn-primary" title="Remove Exam fee along with Level fee">Remove exam fee</button>
-      </div> -->
 
         <div class="form-actions">
           <button class="btn btn-primary" title="Make a POST request on the Fee Record List resource">POST</button>
@@ -204,6 +186,7 @@
     import Multiselect from 'vue-multiselect';
     // Vue.component('multiselect', Multiselect)
     import Alert from '@/components/Alert';
+    import {restAPI} from '@/services/rest-api';
 
     export default {
     name: 'feeform',
@@ -218,8 +201,9 @@
           balance: 0,
           due: 0
         },
+
         add_exam_fee: false,
-        exam_month: {},
+
         alert:{
           message: '',
           type: '',
@@ -291,16 +275,17 @@
               };
               if (this.mode === 'Add') {
 
-                  this.$http.post('http://localhost:8000/api/feerecord/', new_fee)
-                      .then(function(response){
+                  restAPI.post('feerecord/', new_fee)
+                      .then(response => {
                           this.raiseAlert('Fee Record added succesfully','success');
                           this.$emit('feeUpdated');
-                          // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
-                      });
-
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
+                  e.preventDefault();
                   if (this.add_exam_fee) {
                     var exam_month_ids = [];
-                    exam_month_ids.push(this.exam_month.id);
+                    exam_month_ids.push(month_ids.slice(-1).pop());
                     var new_exam_fee = {
                       fee_type: "Exam",
                       fee_amount: this.feerates.exam_fee,
@@ -312,20 +297,25 @@
                       date_of_payment: this.fee.date_of_payment,
                       months: exam_month_ids
                     };
-                    this.$http.post('http://localhost:8000/api/feerecord/', new_exam_fee)
-                        .then(function(response){
+                    restAPI.post('feerecord/', new_exam_fee)
+                        .then(response => {
                             this.raiseAlert('Exam Fee Record added succesfully','success');
                             this.$emit('feeUpdated');
                             // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
-                        });
+                        }).catch(e => {
+                          console.error(e);console.error(e.response)
+                        })
+                    e.preventDefault();
                   }
 
                 } else if (this.mode === 'Edit'){
-                  this.$http.put('http://localhost:8000/api/feerecord/' + this.fee_id + '/', new_fee)
-                      .then(function(response){
+                  restAPI.put('feerecord/' + this.fee_id + '/', new_fee)
+                      .then(response => {
                           this.raiseAlert('Fee Record edited succesfully','success');
                           this.$emit('feeUpdated');
-                      });
+                      }).catch(e => {
+                        console.error(e);console.error(e.response)
+                      })
                 }
 
                 e.preventDefault();
@@ -335,22 +325,26 @@
 
         fetchFee(id){
             console.log("In fetch fee")
-            this.$http.get('http://127.0.0.1:8000/api/feerecord/'+id + '/')
-            .then(function(response){
-              this.fee = response.body;
+            restAPI.get('feerecord/'+id + '/')
+            .then(response => {
+              this.fee = response.data;
               this.fee_type = this.fee.fee_type;
               if (this.fee_type==="Level")
                 this.selected_months = this.generateMonths(this.fee.months);
               else
                 this.selected_month = this.generateMonths(this.fee.months)[0];
-            });
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
         },
         fetchFeeRates(id){
             console.log("In fetch fee")
-            this.$http.get('http://127.0.0.1:8000/api/feerate/1/')
-            .then(function(response){
-              this.feerates = response.body;
-            });
+            restAPI.get('feerate/1/')
+            .then(response => {
+              this.feerates = response.data;
+            }).catch(e => {
+              console.error(e);console.error(e.response)
+            })
         },
         extractMonthIds(months){
           // console.log("in func");
