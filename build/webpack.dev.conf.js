@@ -65,7 +65,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ])
-  ]
+  ],
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000
+  }
 })
 
 module.exports = new Promise((resolve, reject) => {
