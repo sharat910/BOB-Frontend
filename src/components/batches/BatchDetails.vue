@@ -159,6 +159,7 @@ export default {
           console.log(final_url)
           this.downloadFile(final_url)
         }).catch(e => {
+          this.raiseAlert("Error in download Statement!",'danger')
           console.error(e);console.error(e.response)
         })
       },
@@ -176,7 +177,10 @@ export default {
           link.setAttribute('download', file_name);
           document.body.appendChild(link);
           link.click();
-        });
+        }).catch(e => {
+          this.raiseAlert("Error in file download!",'danger')
+          console.error(e);console.error(e.response)
+        })
       },
       raiseAlert(message,type){
         this.alert.message = message;
