@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     deleteFeeRecord(id){
-        restAPI.delete('http://127.0.0.1:8000/api/feerecord/'+id + '/')
+        restAPI.delete('feerecord/'+id + '/')
         .then(response => {
           this.raiseAlert('Fee record deleted succesfully','success');
         }).catch(e => {
