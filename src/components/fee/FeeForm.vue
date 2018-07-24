@@ -280,7 +280,7 @@
                           this.raiseAlert('Fee Record added succesfully','success');
                           this.$emit('feeUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
                       })
                   e.preventDefault();
                   if (this.add_exam_fee) {
@@ -303,7 +303,7 @@
                             this.$emit('feeUpdated');
                             // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Fee Added'}});
                         }).catch(e => {
-                          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+                          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
                         })
                     e.preventDefault();
                   }
@@ -314,7 +314,7 @@
                           this.raiseAlert('Fee Record edited succesfully','success');
                           this.$emit('feeUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
                       })
                 }
 
@@ -334,7 +334,7 @@
               else
                 this.selected_month = this.generateMonths(this.fee.months)[0];
             }).catch(e => {
-              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
             })
         },
         fetchFeeRates(id){
@@ -343,7 +343,7 @@
             .then(response => {
               this.feerates = response.data;
             }).catch(e => {
-              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
             })
         },
         extractMonthIds(months){

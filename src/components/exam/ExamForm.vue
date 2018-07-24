@@ -115,7 +115,7 @@
                           this.$emit('examUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.student_id},query: {alert: 'Exam Added'}});
                       }).catch(e => {
-                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
                       });
 
                 } else if (this.mode === 'Edit'){
@@ -124,7 +124,7 @@
                           this.raiseAlert('Exam Result edited succesfully.','success');
                           this.$emit('examUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
                       });
                 }
 

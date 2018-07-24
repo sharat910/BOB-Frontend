@@ -191,7 +191,7 @@ export default {
         .then(response => {
             this.rates[item] = response.data[0];
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
     },
     formize(obj){
@@ -211,7 +211,7 @@ export default {
         .then(response => {
               this.raiseAlert(capitalize_first_letter(item.slice(0,-4)) + ' ' + item.slice(-4) + ' edited','success');
         }).catch(e => {
-          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
         })
     },
     raiseAlert(message,type){

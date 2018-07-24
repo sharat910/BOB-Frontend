@@ -77,7 +77,7 @@ export default {
           .then(response => {
             this.teacher = response.data;
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
       },
       refetchTeacher: function () {
@@ -89,7 +89,7 @@ export default {
           .then(response => {
             this.$router.push({name: 'Teachers', query: {alert: 'Teacher Deleted'}});
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
       },
       raiseAlert(message,type){

@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="student in filterBy(students, filterInput)">
+          <tr v-for="student in filterBy(students, filterInput)" :class="{ 'danger' : student.dues.due, '' : !student.dues.due }">
             <td>{{student.code}}</td>
             <td>{{student.name}}</td>
             <td>{{student.batch_details}}</td>
@@ -43,7 +43,7 @@
   import Alert from '@/components/Alert';
   import {restAPI} from '@/services/rest-api';
 
-  
+
   export default {
     name: 'students',
     props: {
@@ -67,7 +67,7 @@
           .then(response => {
             this.students = response.data;
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
       },
       filterBy(list, value){

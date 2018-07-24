@@ -109,7 +109,7 @@ export default {
         .then(response => {
           this.raiseAlert('Transaction deleted succesfully','success');
         }).catch(e => {
-          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
         })
       }
       else
@@ -153,7 +153,7 @@ export default {
             .then(response => {
               this.raiseAlert('Item: ' + item.description + '  |  Quantity edited','info');
             }).catch(e => {
-              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
             })
 
       };

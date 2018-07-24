@@ -69,7 +69,7 @@
         .then(response => {
           this.batches = response.data;
         }).catch(e => {
-          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
         })
       },
       filterBy(list, value){
