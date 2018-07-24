@@ -2,9 +2,23 @@
   <div class="details">
     <div class="container">
       <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
-      <router-link class="btn btn-default" :to="{name: 'Students'}">Back</router-link>
+
+      <div class="top">
+        <router-link class="btn btn-default" :to="{name: 'Students'}">Back</router-link>
+        <span class="pull-right">
+          <ul class="pagination pagination-lg">
+            <li class="page-item"><a class="page-link">{{student.dues.first_month}}</a></li>
+            <li class="page-item"><a class="page-link">{{student.dues.second_month}}</a></li>
+            <li class="page-item"><a class="page-link">{{student.dues.third_month}}</a></li>
+            <li class="page-item"><a class="page-link">{{student.dues.exam}}</a></li>
+          </ul>
+        </span>
+      </div>
+      <br>
+
 
     <h1 class="page-header">{{student.name}}
+      <span v-if="student.dues.due" class="label label-danger">Fee Due</span>
         <span class="pull-right">
             <button type="button" v-if="!additional_details" @click="additional_details=true" class="btn btn-info">More details</button>
             <button type="button" v-else @click="additional_details=false" class="btn btn-info">Hide details</button>
@@ -149,7 +163,9 @@ export default {
   name: 'studentdetails',
   data () {
     return {
-      student: {},
+      student: {
+        dues: {}
+      },
       alert:{
         message: '',
         type: '',
@@ -164,7 +180,7 @@ export default {
           .then(response => {
             this.student = response.data;
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
       },
       deleteStudent(id){
@@ -172,7 +188,7 @@ export default {
           .then(response => {
             this.$router.push({name: 'Students', query: {alert: 'Student deleted succesfully.'}});
           }).catch(e => {
-            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })
       },
       refetchStudent: function () {
