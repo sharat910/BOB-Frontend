@@ -71,7 +71,7 @@
                         this.raiseAlert(this.resource + ' added succesfully','success');
                         this.$emit('resourceUpdated');
                     }).catch(e => {
-                      console.error(e);console.error(e.response)
+                      console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                     });
 
             } else if (this.mode === 'Edit'){
@@ -80,7 +80,7 @@
                       this.raiseAlert(this.resource + ' edited succesfully','success');
                       this.$emit('resourceUpdated');
                   }).catch(e => {
-                    console.error(e);console.error(e.response)
+                    console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                   });
             }
         },
@@ -90,7 +90,7 @@
             .then(response => {
               this.model = response.data;
             }).catch(e => {
-              console.error(e);console.error(e.response)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
             });
         },
         setRelatedResourcesSchema(model_name,resource_name,val){
@@ -122,7 +122,7 @@
                 this.schema.fields.push(field);
               }
             }).catch(e => {
-              console.error(e);console.error(e.response)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
             });
         },
         fetchFormData(){
@@ -130,7 +130,7 @@
           .then(response => {
             this.setFormSchema(response.data,[],this.postResource);
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           });
         },
         setFormSchema(options_data){

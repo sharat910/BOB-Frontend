@@ -264,7 +264,7 @@
                           this.$emit('salaryUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Salary Added'}});
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       })
 
                 } else if (this.mode === 'Edit'){
@@ -273,7 +273,7 @@
                           this.raiseAlert('Salary Record edited succesfully','success');
                           this.$emit('salaryUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       })
                 }
 
@@ -294,7 +294,7 @@
               else
                 this.selected_month = this.generateMonths(this.salary.months)[0];
             }).catch(e => {
-              console.error(e);console.error(e.response)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
             })
         },
 
@@ -303,7 +303,7 @@
           .then(response => {
             this.salary_rate = response.data['salary_rate'];
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
         },
 

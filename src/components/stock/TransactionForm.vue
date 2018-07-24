@@ -115,7 +115,7 @@ export default {
         this.tx.operation = response.data['operation'];
         this.tx.date = response.data['date'];
       }).catch(e => {
-        console.error(e);console.error(e.response)
+        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
       })
     },
     performQuickTransaction(tx_op,date=null){
@@ -140,7 +140,7 @@ export default {
           .then(response => {
             this.emitAlert('Item: ' + this.item.description + '  |  Quantity updated succesfully','success');
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
     },
     editStockItem(tx_op,tx_quantity,item,mute_alerts=false){
@@ -181,7 +181,7 @@ export default {
             .then(response => {
               this.emitAlert('Item: ' + item.description + '  |  Quantity edited','info');
             }).catch(e => {
-              console.error(e);console.error(e.response)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
             })
 
       };
@@ -236,7 +236,7 @@ export default {
         .then(response => {
           this.emitAlert('Transaction edited succesfully','success')
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
       }
     },

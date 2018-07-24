@@ -86,7 +86,7 @@ export default {
           this.raiseAlert('Expenditure record deleted succesfully');
           this.waitAndFetchExpenditures();
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
     },
     fetchExpenditures(){
@@ -94,7 +94,7 @@ export default {
       .then(response => {
         this.expenditures = response.data;
       }).catch(e => {
-        console.error(e);console.error(e.response)
+        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
       })
     },
     waitAndFetchExpenditures(){

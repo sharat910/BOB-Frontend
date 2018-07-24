@@ -146,7 +146,7 @@ methods:{
         .then(response => {
           this.item = response.data;
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
     },
     editItem(){
@@ -155,7 +155,7 @@ methods:{
               this.raiseAlert('Stock Item details edited succesfully.','success');
               this.refetchItem();
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
     },
     deleteItem(id){
@@ -163,7 +163,7 @@ methods:{
         .then(response => {
           this.$router.push({name: 'Items', query: {alert: 'Stock item deleted succesfully'}});
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
     },
     refetchItem: function () {

@@ -94,7 +94,7 @@ export default {
         .then(response => {
           this.raiseAlert('Fee record deleted succesfully','success');
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
     },
     raiseAlert(message,type){

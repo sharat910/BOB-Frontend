@@ -136,7 +136,7 @@ export default {
           .then(response => {
             this.batch = response.data;
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
       },
       deleteBatch(id){
@@ -144,7 +144,7 @@ export default {
           .then(response => {
             this.$router.push({name: 'Batches', query: {alert: 'Batch Deleted'}});
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
       },
       downloadStatement(){
@@ -160,7 +160,7 @@ export default {
           this.downloadFile(final_url)
         }).catch(e => {
           this.raiseAlert("Error in download Statement!",'danger')
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
       },
       downloadFile(complete_url){
@@ -179,7 +179,7 @@ export default {
           link.click();
         }).catch(e => {
           this.raiseAlert("Error in file download!",'danger')
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         })
       },
       raiseAlert(message,type){

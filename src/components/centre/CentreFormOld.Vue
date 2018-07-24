@@ -58,7 +58,7 @@
                           this.raiseAlert('Centre added succesfully','success');
                           this.$emit('centreUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       });
 
                 } else if (this.mode === 'Edit'){
@@ -67,7 +67,7 @@
                           this.raiseAlert('Centre edited succesfully','success');
                           this.$emit('centreUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       });
                 }
         },
@@ -82,7 +82,7 @@
           .then(response => {
             this.setFormSchema(response.data,[],this.postCentre);
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           });
         },
         setFormSchema(options_data,exclude_fields=[]){

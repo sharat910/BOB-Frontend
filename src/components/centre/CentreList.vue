@@ -84,7 +84,7 @@ export default {
           this.raiseAlert('Centre record deleted succesfully');
           this.waitAndFetchCentres();
         }).catch(e => {
-          console.error(e);console.error(e.response)
+          console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
         });
     },
     fetchCentres(){
@@ -92,7 +92,7 @@ export default {
       .then(response => {
         this.centres = response.data;
       }).catch(e => {
-        console.error(e);console.error(e.response)
+        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
       })
     },
     waitAndFetchCentres(){

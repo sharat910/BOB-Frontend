@@ -164,7 +164,7 @@ export default {
           .then(response => {
             this.student = response.data;
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
       },
       deleteStudent(id){
@@ -172,7 +172,7 @@ export default {
           .then(response => {
             this.$router.push({name: 'Students', query: {alert: 'Student deleted succesfully.'}});
           }).catch(e => {
-            console.error(e);console.error(e.response)
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
           })
       },
       refetchStudent: function () {

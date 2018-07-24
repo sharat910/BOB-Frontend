@@ -99,7 +99,7 @@
                           this.$emit('expenditureUpdated');
                           // this.$router.push({name: 'StudentDetails', params: {id: this.teacher_id},query: {alert: 'Expenditure Added'}});
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       });
 
                 } else if (this.mode === 'Edit'){
@@ -108,7 +108,7 @@
                           this.raiseAlert('Expenditure Record edited succesfully','success');
                           this.$emit('expenditureUpdated');
                       }).catch(e => {
-                        console.error(e);console.error(e.response)
+                        console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
                       });
                 }
 
@@ -122,7 +122,7 @@
             .then(response => {
               this.expenditure = response.data;
             }).catch(e => {
-              console.error(e);console.error(e.response)
+              console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.',danger)
             });
         },
 
