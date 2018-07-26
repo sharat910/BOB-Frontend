@@ -5,12 +5,16 @@
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
     <h1 v-if="!isChild" class="page-header">
       Manage Students
+      <button @click="show_only_unpaid=true" v-if="show_only_unpaid==false" class="btn btn-danger">{{unpaid_students}}/{{total_students}} Fee Due</button>
+      <button @click="show_only_unpaid=false" v-else class="btn btn-primary">Show all</button>
       <span class="pull-right">
         <router-link class="btn btn-success" :to="{ name: 'AddStudent'}">Add Student</router-link>
       </span>
     </h1>
     <h2 v-else class="page-header">
       Manage Students
+      <button @click="show_only_unpaid=true" v-if="show_only_unpaid==false" class="btn btn-danger">{{unpaid_students}}/{{total_students}} Fee Due</button>
+      <button @click="show_only_unpaid=false" v-else class="btn btn-primary">Show all</button>
       <span class="pull-right">
         <router-link class="btn btn-success" :to="{ name: 'AddStudent'}">Add Student</router-link>
       </span>
@@ -27,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="student in filterBy(students, filterInput)" :class="{ 'danger' : student.dues.due, '' : !student.dues.due }">
+          <tr v-for="student in filterUnpaid(filterBy(students, filterInput))" :class="{ 'danger' : student.dues.due, '' : !student.dues.due }">
             <td>{{student.code}}</td>
             <td>{{student.name}}</td>
             <td>{{student.batch_details}}</td>
@@ -53,6 +57,12 @@
     data () {
       return {
         students: [],
+
+        unpaid_students: 0,
+        total_students: 0,
+
+        show_only_unpaid: false,
+
         alert:{
           message: '',
           type: '',
@@ -76,6 +86,15 @@
           return student.name.indexOf(value) > -1;
         });
       },
+      filterUnpaid(list){
+        if (this.show_only_unpaid){
+          return list.filter(function(student){
+            return student.dues.due
+          })
+        }else{
+          return list;
+        }
+      },
       raiseAlert(message,type){
         this.alert.message = message;
         this.alert.type = type;
@@ -98,11 +117,18 @@
         if (val != undefined) {
           this.students = val;
         }
+      },
+      students: function(students){
+        console.log("Watcher exec")
+        var n = 0;
+        for (var i in students){
+          if (students[i].dues.due)
+            n += 1
+        }
+        this.unpaid_students = n;
+        this.total_students = students.length;
       }
     },
-    // updated: function(){
-    //   this.fetchStudents();
-    // },
     components: {
       Alert,
     }

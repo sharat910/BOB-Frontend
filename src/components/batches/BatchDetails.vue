@@ -47,8 +47,20 @@
     </h1>
 
     <form class="form-horizontal">
+
       <div class="well">
 
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Teacher </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> <router-link :to="{name: 'TeacherDetails',params: {'id':batch.teacher}}">{{batch.teacher_name}}</router-link></li>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="well">
         <div class="form-group ">
           <label class="col-sm-2 control-label "> Day </label>
           <div class="col-sm-10">
@@ -97,16 +109,6 @@
 
       </div>
 
-      <div class="well">
-
-        <div class="form-group ">
-          <label class="col-sm-2 control-label "> Teacher </label>
-          <div class="col-sm-10">
-            <li class="list-group-item"> {{batch.teacher_name}} </li>
-          </div>
-        </div>
-
-      </div>
     </form>
     <br>
   </div>
