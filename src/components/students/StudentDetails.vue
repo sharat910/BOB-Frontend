@@ -121,7 +121,7 @@
     </form>
     <br>
     </div>
-    <FeeRecordList :feerecords="student.feerecords" :student_id="student.id" v-on:feeUpdated="refetchStudent()"/>
+    <FeeRecordList :feerecords="student.feerecords" :student_id="student.id" :batch="batch" v-on:feeUpdated="refetchStudent()"/>
     <ExamResultList :examresults="student.examresults" :student_id="student.id" v-on:examUpdated="refetchStudent()"/>
 </div>
 </template>
@@ -166,6 +166,7 @@ export default {
       student: {
         dues: {}
       },
+      batch: {},
       alert:{
         message: '',
         type: '',
@@ -179,6 +180,15 @@ export default {
           restAPI.get('student/'+id + '/')
           .then(response => {
             this.student = response.data;
+            this.fetchBatch(this.student.batch);
+          }).catch(e => {
+            console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
+          })
+      },
+      fetchBatch(id){
+          restAPI.get('batch/'+id + '/')
+          .then(response => {
+            this.batch = response.data;
           }).catch(e => {
             console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
           })

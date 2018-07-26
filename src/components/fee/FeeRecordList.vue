@@ -53,6 +53,7 @@
           :student_id="this.student_id"
           :mode="this.mode"
           :fee_id="this.fee_id"
+          :batch="this.batch"
           v-on:feeUpdated="$emit('feeUpdated')"
           />
         </div>
@@ -73,7 +74,8 @@ export default {
   name: 'feerecordlist',
   props: {
     feerecords: Array,
-    student_id: Number
+    student_id: Number,
+    batch: Object
   },
   data() {
       return {

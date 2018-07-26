@@ -69,6 +69,18 @@
         </div>
       </div>
 
+      <div class="form-group ">
+
+        <label class="col-sm-2 control-label ">
+          Payment Date
+        </label>
+
+
+        <div class="col-sm-10">
+          <input name="date_of_payment" class="form-control" type="date" v-model="fee.date_of_payment" value="">
+        </div>
+      </div>
+
       <div class="form-group">
 
           <label class="col-sm-2 control-label ">
@@ -97,19 +109,6 @@
           </select>
         </div>
       </div>
-
-      <div class="form-group ">
-
-        <label class="col-sm-2 control-label ">
-          Payment Date
-        </label>
-
-
-        <div class="col-sm-10">
-          <input name="date_of_payment" class="form-control" type="date" v-model="fee.date_of_payment" value="">
-        </div>
-      </div>
-
 
       <div v-if="multiple_months" class="form-group">
 
@@ -194,12 +193,14 @@
       mode: String,
       student_id: Number,
       fee_id: Number,
+      batch: Object
     },
     data () {
         return {
         fee: {
           balance: 0,
-          due: 0
+          due: 0,
+          level: this.batch.level,
         },
 
         add_exam_fee: false,
@@ -365,6 +366,14 @@
           }
           return output;
         },
+        generateMonthArray(month_obj){
+          var output = [];
+          for (var k in month_obj){
+
+            output.push(month_obj[k])
+          }
+          return output;
+        },
         raiseAlert(message,type){
           this.alert.message = message;
           this.alert.type = type;
@@ -393,6 +402,7 @@
 
         if (val === 'Level') {
             this.fee.fee_amount = this.feerates.level_fee;
+            this.selected_months = this.generateMonths(this.batch.running_months);
             this.multiple_months = true;
         } else if (val == 'Month' ) {
             this.fee.fee_amount = this.feerates.month_fee;
@@ -407,6 +417,15 @@
           console.log("No type set");
         }
       },
+      selected_month: function(val){
+        console.log(val)
+        var running_months = this.batch.running_months;
+        if (running_months.includes(val.id)){
+          this.closeAlert()
+        }else{
+          this.raiseAlert("Selected month not in running months of enrolled batch!",'danger');
+        }
+      }
       // mode: function(val){
       //   if (val === 'Edit'){
       //     this.fetchFee(this.fee_id);
