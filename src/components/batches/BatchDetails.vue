@@ -87,6 +87,13 @@
           </div>
         </div>
 
+        <div class="form-group ">
+          <label class="col-sm-2 control-label "> Running Months </label>
+          <div class="col-sm-10">
+            <li class="list-group-item"> {{batch.running_months_names}} </li>
+          </div>
+        </div>
+
       </div>
 
       <div class="well">
@@ -202,7 +209,7 @@ export default {
   components: {
     Students,
     Alert
-  }
+  },
 }
 </script>
 

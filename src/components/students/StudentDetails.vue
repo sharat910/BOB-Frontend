@@ -40,7 +40,7 @@
         <div class="form-group ">
           <label class="col-sm-2 control-label "> Batch Details </label>
           <div class="col-sm-10">
-            <li class="list-group-item"> {{student.batch_details}} </li>
+            <li class="list-group-item"> <router-link :to="{name: 'BatchDetails',params: {'id':student.batch}}">{{student.batch_details}}</router-link></li>
           </div>
         </div>
 
