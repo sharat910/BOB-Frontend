@@ -39,6 +39,7 @@
     </div>
 
     <h1 class="page-header">{{batch.level_detail}} | {{batch.teacher_name}}
+      <span v-if="batch.exam_this_month" class="label label-danger">Exam this month</span>
         <span class="pull-right">
           <router-link class="btn btn-primary" :to="{name:'EditBatch',props: {id:batch.id}}">Edit</router-link>
           <button class="btn btn-danger" v-on:click="deleteBatch(batch.id)">Delete</button>

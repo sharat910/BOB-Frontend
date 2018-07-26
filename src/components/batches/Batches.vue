@@ -28,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="batch in filterBy(batches, filterInput)">
+          <tr v-for="batch in filterBy(batches, filterInput)" :class="{ 'danger' : batch.exam_this_month, '' : !batch.exam_this_month }">
             <td>{{batch.id}}</td>
             <td>{{batch.day}}</td>
             <td>{{batch.timing}}</td>
