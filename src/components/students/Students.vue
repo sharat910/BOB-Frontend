@@ -49,7 +49,7 @@
   import {restAPI} from '@/services/rest-api';
 
   import Loading from 'vue-loading-overlay';
-  import 'vue-loading-overlay/dist/vue-loading.min.css';
+
 
 
   export default {
