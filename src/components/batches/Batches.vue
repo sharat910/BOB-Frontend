@@ -2,6 +2,7 @@
   <div class="batches">
   <div class="container">
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
+    <loading :active.sync="loading" :can-cancel="false" :is-full-page="true"></loading>
     <h1 v-if="!isChild" class="page-header">
       Manage Batches
       <button @click="show_only_exam=true" v-if="show_only_exam==false" class="btn btn-danger">{{exam_batches}}/{{total_batches}} Exams</button>
@@ -52,6 +53,9 @@
   import Alert from '@/components/Alert';
   import {restAPI} from '@/services/rest-api';
 
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.min.css';
+
   export default {
     name: 'batches',
     props: {
@@ -64,6 +68,7 @@
         exam_batches: 0,
         total_batches: 0,
         show_only_exam: false,
+        loading: false,
         alert:{
           message: '',
           type: '',
@@ -74,8 +79,10 @@
     },
     methods: {
       fetchBatches(){
+        this.loading = true;
         restAPI.get('batch/')
         .then(response => {
+          this.loading = false;
           this.batches = response.data;
         }).catch(e => {
           console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
@@ -140,6 +147,7 @@
     },
     components: {
       Alert,
+      Loading
     }
   }
 </script>

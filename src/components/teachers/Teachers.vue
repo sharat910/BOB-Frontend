@@ -2,6 +2,8 @@
   <div class="teachers">
   <div class="container">
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
+    <loading :active.sync="loading" :can-cancel="false" :is-full-page="true"></loading>
+
     <h1 class="page-header">
       Manage Teachers
       <span class="pull-right">
@@ -36,6 +38,9 @@
   import Alert from '@/components/Alert';
   import {restAPI} from '@/services/rest-api';
 
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.min.css';
+
   export default {
     name: 'teachers',
     props: {
@@ -49,13 +54,16 @@
           type: '',
           raised: false
         },
-        filterInput:''
+        filterInput:'',
+        loading: false
       }
     },
     methods: {
       fetchTeachers(){
+        this.loading = true;
         restAPI.get('teacher/')
           .then(response => {
+            this.loading = false;
             this.teachers = response.data;
           }).catch(e => {
             console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
@@ -88,7 +96,8 @@
     //   this.fetchTeachers();
     // },
     components: {
-      Alert
+      Alert,
+      Loading
     }
   }
 </script>

@@ -16,6 +16,7 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "vue": "^2.5.2",
     "vue-form-generator": "^2.2.2",
+    "vue-loading-overlay": "^2.1.0",
     "vue-multiselect": "^2.1.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1"

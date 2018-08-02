@@ -3,6 +3,7 @@
 
   <div class="container">
     <Alert v-if="alert.raised" :message="alert.message" :type="alert.type" @alertClosed="closeAlert()"/>
+    <loading :active.sync="loading" :can-cancel="false" :is-full-page="true"></loading>
     <h1 v-if="!isChild" class="page-header">
       Manage Students
       <button @click="show_only_unpaid=true" v-if="show_only_unpaid==false" class="btn btn-danger">{{unpaid_students}}/{{total_students}} Fee Due</button>
@@ -31,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="student in filterUnpaid(filterBy(students, filterInput))" :class="{ 'danger' : student.dues.due, '' : !student.dues.due }">
+          <tr v-for="student in filterUnpaid(filterBy(students, filterInput))" :class="{ 'danger' : student.dues.due, '' : !student.dues.due, 'info': student.graduated, 'warning': student.dropped }">
             <td>{{student.code}}</td>
             <td>{{student.name}}</td>
             <td>{{student.batch_details}}</td>
@@ -46,6 +47,9 @@
 <script>
   import Alert from '@/components/Alert';
   import {restAPI} from '@/services/rest-api';
+
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.min.css';
 
 
   export default {
@@ -62,6 +66,7 @@
         total_students: 0,
 
         show_only_unpaid: false,
+        loading: false,
 
         alert:{
           message: '',
@@ -73,8 +78,10 @@
     },
     methods: {
       fetchStudents(){
+        this.loading = true
         restAPI.get('student/')
           .then(response => {
+            this.loading = false
             this.students = response.data;
           }).catch(e => {
             console.error(e);console.error(e.response);this.raiseAlert('Error! Please check console for more information.','danger')
@@ -131,6 +138,7 @@
     },
     components: {
       Alert,
+      Loading
     }
   }
 </script>
